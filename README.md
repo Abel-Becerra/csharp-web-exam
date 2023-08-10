@@ -33,7 +33,7 @@ It is necessary to develop three minimal components for the ecosystem (solution)
 
 - **A relational database** (with at least two related tables)
 - **An application programming interface (*API*)**
-- **A graphical user interface interface (*GUI*)**
+- **A graphical user interface (*GUI*)**
 
 Functionality requirements:
 
