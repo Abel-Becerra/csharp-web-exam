@@ -21,7 +21,7 @@ Tools needed to work on:
 1. Create a branch to make changes:
    - Following the [technical statement](#technical-statement).
    - Meeting [requirements](requirements.md).
-1. [Compile](#compile) and test.
+1. Compile and test.
 1. Create a merge request (or pull request) for:
    - Describing changes
    - Reviewing changes
