@@ -9,11 +9,12 @@ Tools needed to work on:
 - **Operative System**:
   - Microsoft Windows
 - **Framework**:
-  - [.NET Core 3.1 SDK](https://dotnet.microsoft.com/en-us/download)
+  - [.NET Core 2.1 (or greater)](https://dotnet.microsoft.com/es-es/download/dotnet)
+  - [.NET Framework 4.7.2 (or greater)](https://dotnet.microsoft.com/es-es/download/dotnet-framework)
 - ***IDE***:
   - [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code](https://code.visualstudio.com/)
 - **Build & Package**:
-  - [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish)
+  - [Microsoft Build Tools 2015](https://www.microsoft.com/es-mx/download/details.aspx?id=48159)
 
 ## Statement
 
@@ -46,4 +47,3 @@ Functionality requirements:
     - Paginate data (in case of a lot of rows).
     - Group data under some criteria.
 - All entire solution must log that happened in the methods, to track all kinds of events (information, warnings, errors & debug).
-
