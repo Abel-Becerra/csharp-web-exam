@@ -1,50 +1,53 @@
-# Code
+# User
 
-This document should describe how the code is structured and how the developer implemented the logic in a clear and maintainable way.
+This document should describe how the end user interacts with the web application. It must cover the main functionalities available through the interface and what actions can be performed.
 
-## Project Layout
+## Overview
 
-> Describe how the code is organized into folders or layers and how responsibility is divided.
+> Provide a brief summary of what the web application does from the user's perspective.
 > 
 > Example:
-> - `Controllers/`: HTTP endpoints and request handling
-> - `Models/`: Data transfer objects and entity definitions
-> - `Views/`: Razor or MVC views for rendering UI
-> - `Services/`: Application logic or helper utilities
+> A web interface that allows users to manage and review records through forms and tables.
 
 ...
 
-## Expected Practices
+## Access and Navigation
 
-> Mention the minimum design expectations and how conventions or patterns are applied.
+> Indicate how the user accesses the application and what sections are available.
 > 
 > Example:
-> - Use MVC structure in the web project
-> - Use ORM for data access (e.g., Entity Framework Core)
-> - Apply design patterns where needed (e.g., Repository)
+> The application is accessed via browser at `http://localhost:5000/`. Main sections include a dashboard, a form to manage entries, and a report view.
 
 ...
 
-## Code Quality
+## Functionalities
 
-> Explain what standards are expected to ensure maintainability and clarity.
+> Describe the key features available in the interface.
 > 
 > Example:
-> - No hardcoded values
-> - Use configuration files
-> - Consistent naming and scoping
-> - Proper logging
-> - Exceptions are handled appropriately
+> - Create, edit, and delete items through a form
+> - View paginated and grouped lists of data
+> - Filter or search records by specific fields
 
 ...
 
-## Clarity and Documentation
+## Interface Behavior
 
-> Indicate that the code should be self-explanatory and that supporting diagrams or summaries are encouraged if they improve understanding.
+> Explain how the application responds to user actions.
 > 
 > Example:
-> - Use comments for complex logic when needed
-> - UML diagrams are encouraged for non-trivial workflows
-> - All parts of the application must be easy to follow for a reviewer
+> - Validation messages appear when submitting incomplete forms
+> - Success or error alerts are shown after operations
+> - Table content updates dynamically after changes
+
+...
+
+## Limitations
+
+> Mention any known limitations, assumptions, or fixed values in the interface behavior.
+> 
+> Example:
+> - Only supports English language
+> - No authentication or user roles implemented
 
 ...
