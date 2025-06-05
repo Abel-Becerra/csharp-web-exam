@@ -14,29 +14,29 @@
 ### Architecture
 
 - Transparency and coherence
-- Routes
-- Design and structure of data
-- Use of ORM
+- Clear route definitions
+- Proper data design and structure
+- Use of ORM for data access
 - Use of MVC patterns
-- Access modifiers to attributes and methods
+- Proper use of access modifiers (public, private, internal)
 
 ## Specific
 
 ### Solution
 
-- **Exception handling**: For catch errors, force raise exception and user interruptions.
-- **Non-hardcoded code**: Using constants or configuration files.
-- **Test use cases (or unit tests instead)**: For document which tests are made ensuring stability.
-- **Logging**: For debugging events according as logic is running.
-- **Security**: For attributes and methods (scoping).
-- **Naming**: Coherence naming.
+- **Exception handling**: Catch errors, handle unexpected conditions, and support graceful user interruptions.
+- **Non-hardcoded code**: Use constants or configuration files instead of magic values.
+- **Test use cases (or unit tests)**: Provide evidence of tests performed to ensure stability.
+- **Logging**: Log relevant events during logic execution for debugging and traceability.
+- **Security**: Properly scope access to attributes and methods.
+- **Naming**: Consistent and meaningful naming throughout the codebase.
 
 ### Documentation
 
-- **User**: Exposing to final user funcionability of application.
-- **Implementation**: Exposing to *Operation team* users how to deploy application ready to run.
-- **Code**: Exposing comments to *Development team* users classes, methods and needed logic to be explain inside code.
-- **Tests**: Exposing each test (input and output) made for the application
+- **User**: Describe what the end user can do with the application.
+- **Implementation**: Describe how the system is deployed and executed locally.
+- **Code**: Document logic inside the code through structure, naming, and minimal comments when necessary.
+- **Tests**: Describe the test coverage and expected input/output behavior.
 
 ### Technical
 
@@ -45,5 +45,5 @@
 ## Workflow
 
 - At least 8 commits.
-- Each commit must be cellular.
-- Each commit message must explain changes shortly and clearly.
+- Each commit must be atomic and focused on a single change.
+- Each commit message must clearly describe the change made.

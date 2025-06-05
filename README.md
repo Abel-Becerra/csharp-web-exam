@@ -1,32 +1,31 @@
 # CSharp Web Exam
 
-Clean C# Web template project for beign completed as an exam to apply for hiring.
+Clean C# Web template project to be completed as a technical exam for hiring purposes.
 
 ## Software stack
 
 Tools needed to work on:
 
 - **Operative System**:
-  - Microsoft Windows
+  - Microsoft Windows 10 or newer
 - **Framework**:
-  - [.NET Core 2.1 (or greater)](https://dotnet.microsoft.com/es-es/download/dotnet)
-  - [.NET Framework 4.7.2 (or greater)](https://dotnet.microsoft.com/es-es/download/dotnet-framework)
+  - [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - ***IDE***:
-  - [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code](https://code.visualstudio.com/)
+  - [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/)
 - **Build & Package**:
-  - [Microsoft Build Tools 2015](https://www.microsoft.com/es-mx/download/details.aspx?id=48159)
+  - Built-in .NET CLI tools (`dotnet build`, `dotnet run`)
 
 ## Statement
 
 1. Import project to a personal git-based storage.
-1. Create a branch to make changes:
+2. Create a branch to make changes:
    - Following the [technical statement](#technical-statement).
    - Meeting [requirements](requirements.md).
-1. Compile and test.
-1. Create a merge request (or pull request) for:
+3. Compile and test.
+4. Create a merge request (or pull request) for:
    - Describing changes
    - Reviewing changes
-1. Share your solution.
+5. Share your solution.
 
 ## Technical statement
 
@@ -46,4 +45,10 @@ Functionality requirements:
   - In report view:
     - Paginate data (in case of a lot of rows).
     - Group data under some criteria.
-- All entire solution must log that happened in the methods, to track all kinds of events (information, warnings, errors & debug).
+- The entire solution must log what happens in the methods, to track all kinds of events (information, warnings, errors & debug).
+
+## Documentation
+
+Documentation must be completed inside the `Docs/` directory.
+
+> Additional folders or documents may be added if needed, but the goal is to fully complete what is explicitly requested in each section.
