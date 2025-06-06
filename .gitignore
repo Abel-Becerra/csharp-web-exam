@@ -192,5 +192,5 @@ DataService/obj/Debug/
 obj/
 bin/
 /csharp-web-exam/.vs/
-/csharp-web-exam/csharp-web-exam/obj/
-/csharp-web-exam/csharp-web-exam/bin/
+/csharp-web-exam/ui/obj/
+/csharp-web-exam/ui/bin/

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp-web-exam", "csharp-web-exam\csharp-web-exam.csproj", "{14AD7A6E-33AE-4D2B-AA1E-688F39DE8B25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ui", "ui\ui.csproj", "{14AD7A6E-33AE-4D2B-AA1E-688F39DE8B25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp-web-exam-api", "csharp-web-exam-api\csharp-web-exam-api.csproj", "{54F265F3-D501-443E-A2B2-7859BD910CDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{54F265F3-D501-443E-A2B2-7859BD910CDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

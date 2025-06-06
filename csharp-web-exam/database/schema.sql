@@ -1,0 +1,2 @@
+-- SQL schema for exam database
+-- Add CREATE TABLE statements here
