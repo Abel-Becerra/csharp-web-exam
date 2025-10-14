@@ -1,8 +1,8 @@
-# Documentation
+# 📚 Documentation Index
 
-## 📚 Overview
+Welcome to the comprehensive documentation for the **C# Web Exam** project.
 
-Complete documentation for the CSharp Web Exam project, organized by focus area for easy navigation.
+**Last Updated**: 2025-10-14, organized by focus area for easy navigation.
 
 ## 📁 Documentation Structure
 
@@ -42,6 +42,13 @@ High-level overviews and indices:
 - **[Executive Summary](Reference/EXECUTIVE_SUMMARY.md)** - Project overview for reviewers
 - **[Documentation Index](Reference/DOCUMENTATION_INDEX.md)** - Complete documentation index
 
+### 📝 [Commits Documentation](Commits/README.md)
+Commit workflow and history:
+- **[All Commits Summary](Commits/ALL_COMMITS_SUMMARY.md)** - Comprehensive commit history (20 commits)
+- **[Commits Completed](Commits/COMMITS_COMPLETED.md)** - Completion report with MR template
+- **[Ready to Push](Commits/READY_TO_PUSH.md)** - Pre-push checklist
+- **[Updated Commit Plan](Commits/UPDATED_COMMIT_PLAN.md)** - Atomic commit plan
+
 ## 🎯 Quick Navigation
 
 ### I want to...
@@ -69,11 +76,13 @@ High-level overviews and indices:
 
 ## 📊 Documentation Statistics
 
-- **Total Documents**: 20+ markdown files
-- **Categories**: 6 main sections
-- **Lines of Documentation**: ~5,000+ lines
-- **Code Examples**: 50+ snippets
+- **Total Documents**: 35+ markdown files
+- **Categories**: 7 main sections
+- **Lines of Documentation**: ~10,000+ lines
+- **Code Examples**: 100+ snippets
 - **Diagrams**: Multiple architecture diagrams
+- **Test Documentation**: 5 technical documents
+- **Commit Documentation**: 6 workflow documents
 
 ## 🔄 Documentation Updates
 
