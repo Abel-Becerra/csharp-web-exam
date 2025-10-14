@@ -1,0 +1,67 @@
+@model IEnumerable<csharp_web_exam.Models.ProductGroupViewModel>
+
+@{
+    ViewBag.Title = "Products Grouped by Category";
+}
+
+<h2>Products Grouped by Category</h2>
+
+<p>
+    @Html.ActionLink("Back to Products", "Index", null, new { @class = "btn btn-default" })
+</p>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @TempData["Error"]
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Summary Report</h3>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Product Count</th>
+                    <th>Total Value</th>
+                    <th>Average Price</th>
+                    <th>Min Price</th>
+                    <th>Max Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in Model)
+                {
+                    <tr>
+                        <td><strong>@group.CategoryName</strong></td>
+                        <td>@group.ProductCount</td>
+                        <td>@group.TotalValue.ToString("C")</td>
+                        <td>@group.AveragePrice.ToString("C")</td>
+                        <td>@group.MinPrice.ToString("C")</td>
+                        <td>@group.MaxPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="info">
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>@Model.Sum(g => g.ProductCount)</strong></td>
+                    <td><strong>@Model.Sum(g => g.TotalValue).ToString("C")</strong></td>
+                    <td colspan="3"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <strong>No data available.</strong> Add some products to see the grouped report.
+    </div>
+}
