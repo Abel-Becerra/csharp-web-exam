@@ -180,8 +180,6 @@ UpgradeLog*.htm
 *.bim_*.settings
 
 # Microsoft Fakes
-FakesAssemblies/
-
 # LightSwitch generated files
 GeneratedArtifacts/
 _Pvt_Extensions/
@@ -194,3 +192,18 @@ bin/
 /csharp-web-exam/.vs/
 /csharp-web-exam/ui/obj/
 /csharp-web-exam/ui/bin/
+
+# SQLite databases (exclude all environments)
+*.db
+*.db-shm
+*.db-wal
+app_data/
+**/app_data/
+
+# Log files
+logs/
+**/logs/
+*.log
+
+# Environment-specific files (keep templates only)
+# appsettings.*.json files are kept for environment configuration
