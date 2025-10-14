@@ -207,3 +207,10 @@ logs/
 
 # Environment-specific files (keep templates only)
 # appsettings.*.json files are kept for environment configuration
+
+# Additional ignores
+.vs/
+**/.vs/
+**/packages/
+csharp-web-exam/packages/
+csharp-web-exam/ui/.vs/
