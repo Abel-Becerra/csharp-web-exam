@@ -16,6 +16,9 @@ public class UpdateCategoryUseCase
 
     public async Task<bool> ExecuteAsync(int id, UpdateCategoryDto dto)
     {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
         _log.Info($"Executing UpdateCategoryUseCase for ID: {id}");
         
         try

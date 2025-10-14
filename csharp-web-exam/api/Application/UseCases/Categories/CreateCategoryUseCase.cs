@@ -16,6 +16,9 @@ public class CreateCategoryUseCase
 
     public async Task<CategoryDto> ExecuteAsync(CreateCategoryDto dto)
     {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
         _log.Info($"Executing CreateCategoryUseCase for category: {dto.Name}");
         
         try

@@ -16,6 +16,9 @@ public class UpdateProductUseCase
 
     public async Task<bool> ExecuteAsync(int id, UpdateProductDto dto)
     {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
         _log.Info($"Executing UpdateProductUseCase for ID: {id}");
         
         try

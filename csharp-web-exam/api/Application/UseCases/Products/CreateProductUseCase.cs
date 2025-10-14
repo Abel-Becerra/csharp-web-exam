@@ -16,6 +16,9 @@ public class CreateProductUseCase
 
     public async Task<ProductDto> ExecuteAsync(CreateProductDto dto)
     {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
         _log.Info($"Executing CreateProductUseCase for product: {dto.Name}");
         
         try
