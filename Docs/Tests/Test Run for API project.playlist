@@ -1,0 +1,461 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="api.tests" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="api.tests.Endpoints" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="CategoryEndpointsTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.CreateCategory_ValidDto_ReturnsCreated" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.CreateCategory_ValidDto_ReturnsCreated" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.DeleteCategory_ExistingId_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.DeleteCategory_ExistingId_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.DeleteCategory_NonExistingId_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.DeleteCategory_NonExistingId_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetAllCategories_ReturnsCategories" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetAllCategories_ReturnsCategories" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetCategoryById_ExistingId_ReturnsCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetCategoryById_ExistingId_ReturnsCategory" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetCategoryById_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.GetCategoryById_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.UpdateCategory_NonExistingId_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.UpdateCategory_NonExistingId_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.CategoryEndpointsTests.UpdateCategory_ValidDto_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.CategoryEndpointsTests.UpdateCategory_ValidDto_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="ProductEndpointsTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.CreateProduct_ValidDto_ReturnsCreated" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.CreateProduct_ValidDto_ReturnsCreated" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.DeleteProduct_ExistingId_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.DeleteProduct_ExistingId_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.DeleteProduct_NonExistingId_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.DeleteProduct_NonExistingId_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.GetAllProducts_ReturnsPagedResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.GetAllProducts_ReturnsPagedResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.GetGroupedProducts_ReturnsGroupedData" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.GetGroupedProducts_ReturnsGroupedData" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.GetProductById_ExistingId_ReturnsProduct" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.GetProductById_ExistingId_ReturnsProduct" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.GetProductById_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.GetProductById_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.UpdateProduct_NonExistingId_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.UpdateProduct_NonExistingId_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Endpoints.ProductEndpointsTests.UpdateProduct_ValidDto_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Endpoints.ProductEndpointsTests.UpdateProduct_ValidDto_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="api.tests.Repositories" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="CategoryRepositoryTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.CreateAsync_ValidCategory_ReturnsId" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.CreateAsync_ValidCategory_ReturnsId" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.DeleteAsync_ExistingCategory_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.DeleteAsync_ExistingCategory_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.DeleteAsync_NonExistingCategory_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.DeleteAsync_NonExistingCategory_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.GetAllAsync_ReturnsAllCategories" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.GetAllAsync_ReturnsAllCategories" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.GetByIdAsync_ExistingId_ReturnsCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.GetByIdAsync_ExistingId_ReturnsCategory" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.GetByIdAsync_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.GetByIdAsync_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.UpdateAsync_ExistingCategory_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.UpdateAsync_ExistingCategory_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.CategoryRepositoryTests.UpdateAsync_NonExistingCategory_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.CategoryRepositoryTests.UpdateAsync_NonExistingCategory_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="ProductRepositoryTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.CreateAsync_ValidProduct_ReturnsId" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.CreateAsync_ValidProduct_ReturnsId" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.DeleteAsync_ExistingProduct_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.DeleteAsync_ExistingProduct_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.DeleteAsync_NonExistingProduct_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.DeleteAsync_NonExistingProduct_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetByIdAsync_ExistingId_ReturnsProduct" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetByIdAsync_ExistingId_ReturnsProduct" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetByIdAsync_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetByIdAsync_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetGroupedByCategoryAsync_ReturnsGroupedData" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetGroupedByCategoryAsync_ReturnsGroupedData" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_ReturnsAllProducts" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_ReturnsAllProducts" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithCategoryFilter_ReturnsFilteredResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithCategoryFilter_ReturnsFilteredResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithPagination_ReturnsCorrectPage" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithPagination_ReturnsCorrectPage" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSearch_ReturnsFilteredResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSearch_ReturnsFilteredResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSortByName_ReturnsSortedResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSortByName_ReturnsSortedResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSortByPriceDesc_ReturnsSortedResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.GetPagedAsync_WithSortByPriceDesc_ReturnsSortedResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.UpdateAsync_ExistingProduct_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.UpdateAsync_ExistingProduct_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Repositories.ProductRepositoryTests.UpdateAsync_NonExistingProduct_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Repositories.ProductRepositoryTests.UpdateAsync_NonExistingProduct_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="api.tests.Services" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="CategoryServiceTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.CreateCategoryAsync_ValidData_ReturnsCreatedCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.CreateCategoryAsync_ValidData_ReturnsCreatedCategory" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.DeleteCategoryAsync_ExistingCategory_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.DeleteCategoryAsync_ExistingCategory_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.DeleteCategoryAsync_NonExistingCategory_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.DeleteCategoryAsync_NonExistingCategory_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.GetAllCategoriesAsync_ReturnsAllCategories" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.GetAllCategoriesAsync_ReturnsAllCategories" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.GetCategoryByIdAsync_ExistingId_ReturnsCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.GetCategoryByIdAsync_ExistingId_ReturnsCategory" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.GetCategoryByIdAsync_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.GetCategoryByIdAsync_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.UpdateCategoryAsync_ExistingCategory_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.UpdateCategoryAsync_ExistingCategory_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.CategoryServiceTests.UpdateCategoryAsync_NonExistingCategory_ReturnsFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.CategoryServiceTests.UpdateCategoryAsync_NonExistingCategory_ReturnsFalse" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="ProductServiceTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.CreateProductAsync_InvalidCategoryId_ThrowsException" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.CreateProductAsync_InvalidCategoryId_ThrowsException" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.CreateProductAsync_ValidData_ReturnsCreatedProduct" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.CreateProductAsync_ValidData_ReturnsCreatedProduct" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.DeleteProductAsync_ExistingProduct_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.DeleteProductAsync_ExistingProduct_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.GetProductByIdAsync_ExistingId_ReturnsProduct" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.GetProductByIdAsync_ExistingId_ReturnsProduct" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.GetProductsAsync_ReturnsPagedResults" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.GetProductsAsync_ReturnsPagedResults" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.GetProductsGroupedByCategoryAsync_ReturnsGroupedData" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.GetProductsGroupedByCategoryAsync_ReturnsGroupedData" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.Services.ProductServiceTests.UpdateProductAsync_ExistingProduct_ReturnsTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.Services.ProductServiceTests.UpdateProductAsync_ExistingProduct_ReturnsTrue" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="api.tests.UseCases.Categories" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="CreateCategoryUseCaseTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.CreateCategoryUseCaseTests.ExecuteAsync_NullDto_ThrowsArgumentNullException" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.CreateCategoryUseCaseTests.ExecuteAsync_NullDto_ThrowsArgumentNullException" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.CreateCategoryUseCaseTests.ExecuteAsync_ValidDto_ReturnsCreatedCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.CreateCategoryUseCaseTests.ExecuteAsync_ValidDto_ReturnsCreatedCategory" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="GetAllCategoriesUseCaseTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.GetAllCategoriesUseCaseTests.ExecuteAsync_ReturnsAllCategories" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.GetAllCategoriesUseCaseTests.ExecuteAsync_ReturnsAllCategories" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.GetAllCategoriesUseCaseTests.ExecuteAsync_ServiceReturnsEmpty_ReturnsEmptyList" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.GetAllCategoriesUseCaseTests.ExecuteAsync_ServiceReturnsEmpty_ReturnsEmptyList" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="GetCategoryByIdUseCaseTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.GetCategoryByIdUseCaseTests.ExecuteAsync_ExistingId_ReturnsCategory" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.GetCategoryByIdUseCaseTests.ExecuteAsync_ExistingId_ReturnsCategory" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Categories.GetCategoryByIdUseCaseTests.ExecuteAsync_NonExistingId_ReturnsNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Categories.GetCategoryByIdUseCaseTests.ExecuteAsync_NonExistingId_ReturnsNull" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="api.tests.UseCases.Products" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="GetProductsUseCaseTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Products.GetProductsUseCaseTests.ExecuteAsync_ReturnsPagedProducts" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Products.GetProductsUseCaseTests.ExecuteAsync_ReturnsPagedProducts" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="api.tests.UseCases.Products.GetProductsUseCaseTests.ExecuteAsync_WithFilters_ReturnsFilteredProducts" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="api.tests.UseCases.Products.GetProductsUseCaseTests.ExecuteAsync_WithFilters_ReturnsFilteredProducts" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>
