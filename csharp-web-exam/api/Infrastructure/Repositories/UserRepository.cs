@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
         using var connection = _connectionFactory.CreateConnection();
         
         var user = await connection.QueryFirstOrDefaultAsync<User>(
-            "SELECT * FROM Users WHERE Username = @Username",
+            "SELECT Id, Username, PasswordHash, Email, Role, CreatedAt FROM Users WHERE Username = @Username",
             new { Username = username });
 
         return user;
@@ -36,7 +36,7 @@ public class UserRepository : IUserRepository
         using var connection = _connectionFactory.CreateConnection();
         
         var user = await connection.QueryFirstOrDefaultAsync<User>(
-            "SELECT * FROM Users WHERE Id = @Id",
+            "SELECT Id, Username, PasswordHash, Email, Role, CreatedAt FROM Users WHERE Id = @Id",
             new { Id = id });
 
         return user;
