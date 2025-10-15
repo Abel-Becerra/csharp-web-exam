@@ -1,0 +1,113 @@
+@model csharp_web_exam.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">
+                    <i class="bi bi-lock-fill"></i> Login
+                </h2>
+
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @Html.ValidationSummary(false, "", new { @class = "mb-0" })
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Username, new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Enter username", autofocus = "autofocus", required = "required" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password", required = "required" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </button>
+                    </div>
+                }
+
+                <hr class="my-4">
+
+                <div class="text-center text-muted small">
+                    <p class="mb-1"><strong>Test Credentials:</strong></p>
+                    <p class="mb-0">Username: <code>admin</code> | Password: <code>admin123</code></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3 text-muted small">
+            <p>Secure authentication with JWT tokens</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Bootstrap 5 form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}
+
+<style>
+    .card {
+        border-radius: 15px;
+    }
+    .input-group-text {
+        background-color: #f8f9fa;
+    }
+    .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+    }
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+</style>
