@@ -150,12 +150,12 @@ namespace ui.tests.Controllers
         }
 
         [TestMethod]
-        public void Create_GET_ReturnsViewResult()
+        public async Task Create_GET_ReturnsViewResult()
         {
             // Arrange
 
             // Act
-            var result = _controller.Create() as ViewResult;
+            var result = await _controller.Create() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -211,16 +211,17 @@ namespace ui.tests.Controllers
         public async Task Edit_POST_WithValidModel_RedirectsToIndex()
         {
             // Arrange
+            int productId = 1;
             var product = new ProductViewModel
             {
-                Id = 1,
+                Id = productId,
                 Name = "Updated Product",
                 Price = 200,
                 CategoryId = 1
             };
 
             // Act
-            var result = await _controller.Edit(product);
+            var result = await _controller.Edit(productId, product);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));

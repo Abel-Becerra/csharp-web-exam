@@ -19,7 +19,7 @@ namespace ui.tests.Models
             var model = new LoginViewModel
             {
                 Username = "admin",
-                Password = "admin123"
+                Password = "SampleEx4mF0rT3st!ñ"
             };
 
             // Act

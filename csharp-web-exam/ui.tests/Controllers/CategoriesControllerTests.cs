@@ -136,14 +136,15 @@ namespace ui.tests.Controllers
         public async Task Edit_POST_WithValidModel_RedirectsToIndex()
         {
             // Arrange
+            int categoryId = 1;
             var category = new CategoryViewModel
             {
-                Id = 1,
+                Id = categoryId,
                 Name = "Updated Category"
             };
 
             // Act
-            var result = await _controller.Edit(category);
+            var result = await _controller.Edit(categoryId, category);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
@@ -153,11 +154,12 @@ namespace ui.tests.Controllers
         public async Task Edit_POST_WithInvalidModel_ReturnsView()
         {
             // Arrange
-            var category = new CategoryViewModel { Id = 1 };
+            int categoryId = 1;
+            var category = new CategoryViewModel { Id = categoryId };
             _controller.ModelState.AddModelError("Name", "Name is required");
 
             // Act
-            var result = await _controller.Edit(category) as ViewResult;
+            var result = await _controller.Edit(categoryId, category) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
