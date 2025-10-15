@@ -192,3 +192,27 @@ The UI is configured to call the API at `https://localhost:5001/api`. If you cha
 
 ### Log Files
 Log files grow over time. The configuration limits each log file to 10MB with 10 backup files. Older logs are automatically rotated.
+
+### 🛠️ Implementation Guide
+
+This folder contains setup, configuration, and deployment documentation for end users.
+
+## 📄 Documents
+
+### Configuration
+- **[ENVIRONMENT_CONFIGURATION.md](ENVIRONMENT_CONFIGURATION.md)** ⭐ - Multi-environment setup guide
+  - Development, QA, and Production configurations
+  - Database connection strings
+  - JWT settings
+  - CORS configuration
+  - Log4net setup
+
+---
+
+## 🔧 Development Documentation
+
+For internal implementation tracking and development process documentation, see:
+- **[Development/Implementation/](../Development/Implementation/)** - Internal docs
+  - Implementation completion reports
+  - Development session summaries
+  - Commit planning

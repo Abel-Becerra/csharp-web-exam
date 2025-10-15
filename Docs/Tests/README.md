@@ -1,35 +1,38 @@
 # 🧪 Test Documentation
 
-This folder contains comprehensive testing documentation for the Product and Category Management System.
-
-## 📄 Documents in This Folder
-
-### Test Suite Documentation
-- **[TEST_SUITE_COMPLETE.md](TEST_SUITE_COMPLETE.md)** ⭐ - Complete test suite overview (~60 tests)
-- **[TESTS_FINAL_STATUS.md](TESTS_FINAL_STATUS.md)** ⭐ - Final status and summary of all tests
-
-### Technical Fixes
-- **[TEST_FIXES_SUMMARY.md](TEST_FIXES_SUMMARY.md)** - Compilation errors fixed (23+ errors)
-- **[TEST_DATABASE_FIX.md](TEST_DATABASE_FIX.md)** - SQLite in-memory database fix
-- **[USE_CASES_VALIDATION_FIX.md](USE_CASES_VALIDATION_FIX.md)** - Use Cases null validation fix
-
-### Legacy Documentation
-- **[README.md](README.md)** - This file - Original test documentation
-
----
+This folder contains testing documentation for the Product and Category Management System.
 
 ## 📊 Quick Stats
 
 - **Total Tests**: ~61 tests
 - **Pass Rate**: 100%
 - **Coverage**: ~85% (service layer)
-- **Test Files**: 10 files (8 new + 2 existing)
+- **Test Files**: 10 files covering all layers
 
 ---
 
-# Original Test Documentation
+## 📄 What's Here
 
-This section describes the testing strategy, coverage, and execution procedures for the Product and Category Management System.
+This README provides:
+- Testing strategy overview
+- Test execution instructions
+- Coverage information
+- Manual testing procedures
+
+## 🔧 Technical Details
+
+For technical implementation details, fixes, and internal testing documentation, see:
+- **[Development/Testing/](../Development/Testing/)** - Technical test documentation
+  - Test suite implementation details
+  - Database testing fixes
+  - Validation fixes
+  - Technical troubleshooting
+
+---
+
+# Testing Strategy & Coverage
+
+This section describes the testing approach for the Product and Category Management System.
 
 ## Test Coverage
 
