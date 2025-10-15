@@ -12,11 +12,11 @@ namespace csharp_web_exam.Controllers
     public class ProductsController : Controller
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(ProductsController));
-        private readonly ApiClient _apiClient;
+        private readonly IApiClient _apiClient;
 
-        public ProductsController()
+        public ProductsController(IApiClient apiClient = null)
         {
-            _apiClient = new ApiClient();
+            _apiClient = apiClient ?? new ApiClient();
         }
 
         // GET: Products
