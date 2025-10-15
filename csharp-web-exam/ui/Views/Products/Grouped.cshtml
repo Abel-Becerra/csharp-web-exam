@@ -4,64 +4,107 @@
     ViewBag.Title = "Products Grouped by Category";
 }
 
-<h2>Products Grouped by Category</h2>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Products")"><i class="bi bi-box-seam"></i> Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Summary Report</li>
+    </ol>
+</nav>
 
-<p>
-    @Html.ActionLink("Back to Products", "Index", null, new { @class = "btn btn-default" })
-</p>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-0"><i class="bi bi-bar-chart-fill"></i> Summary Report</h1>
+        <p class="text-muted mb-0">Products grouped by category with statistics</p>
+    </div>
+    <div>
+        @Html.ActionLink("Back to Products", "Index", null, new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
 
+<!-- Alerts -->
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
         @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
+<!-- Summary Report Table -->
 @if (Model != null && Model.Any())
 {
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Summary Report</h3>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-table"></i> Category Statistics</h5>
         </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Product Count</th>
-                    <th>Total Value</th>
-                    <th>Average Price</th>
-                    <th>Min Price</th>
-                    <th>Max Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var group in Model)
-                {
-                    <tr>
-                        <td><strong>@group.CategoryName</strong></td>
-                        <td>@group.ProductCount</td>
-                        <td>@group.TotalValue.ToString("C")</td>
-                        <td>@group.AveragePrice.ToString("C")</td>
-                        <td>@group.MinPrice.ToString("C")</td>
-                        <td>@group.MaxPrice.ToString("C")</td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr class="info">
-                    <td><strong>TOTAL</strong></td>
-                    <td><strong>@Model.Sum(g => g.ProductCount)</strong></td>
-                    <td><strong>@Model.Sum(g => g.TotalValue).ToString("C")</strong></td>
-                    <td colspan="3"></td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th><i class="bi bi-tag"></i> Category</th>
+                            <th class="text-center"><i class="bi bi-hash"></i> Count</th>
+                            <th class="text-end"><i class="bi bi-cash-stack"></i> Total Value</th>
+                            <th class="text-end"><i class="bi bi-calculator"></i> Avg Price</th>
+                            <th class="text-end"><i class="bi bi-arrow-down-circle"></i> Min Price</th>
+                            <th class="text-end"><i class="bi bi-arrow-up-circle"></i> Max Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model)
+                        {
+                            <tr class="report-row">
+                                <td><strong class="text-primary">@group.CategoryName</strong></td>
+                                <td class="text-center"><span class="badge bg-secondary">@group.ProductCount</span></td>
+                                <td class="text-end"><strong class="text-success">@group.TotalValue.ToString("C")</strong></td>
+                                <td class="text-end">@group.AveragePrice.ToString("C")</td>
+                                <td class="text-end"><small class="text-muted">@group.MinPrice.ToString("C")</small></td>
+                                <td class="text-end"><small class="text-muted">@group.MaxPrice.ToString("C")</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr class="fw-bold">
+                            <td><i class="bi bi-calculator-fill"></i> TOTAL</td>
+                            <td class="text-center"><span class="badge bg-primary">@Model.Sum(g => g.ProductCount)</span></td>
+                            <td class="text-end text-success">@Model.Sum(g => g.TotalValue).ToString("C")</td>
+                            <td colspan="3" class="text-muted text-end"><small>Aggregated totals</small></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 }
 else
 {
-    <div class="alert alert-info">
-        <strong>No data available.</strong> Add some products to see the grouped report.
+    <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-bar-chart" style="font-size: 4rem; color: #dee2e6;"></i>
+            <h4 class="mt-3">No data available</h4>
+            <p class="text-muted">Add some products to see the grouped report with statistics.</p>
+            @Html.ActionLink("Go to Products", "Index", null, new { @class = "btn btn-primary mt-2" })
+        </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        // Add smooth transitions and hover effects
+        document.querySelectorAll('.report-row').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.transition = 'transform 0.2s ease';
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.backgroundColor = '';
+            });
+        });
+    </script>
 }

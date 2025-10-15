@@ -4,59 +4,106 @@
     ViewBag.Title = "Categories";
 }
 
-<h2>Categories</h2>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Categories</li>
+    </ol>
+</nav>
 
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-0"><i class="bi bi-tags"></i> Category Management</h1>
+        <p class="text-muted mb-0">Organize your products by categories</p>
+    </div>
+    <div>
+        @Html.ActionLink("Create New Category", "Create", null, new { @class = "btn btn-primary btn-lg" })
+    </div>
+</div>
+
+<!-- Alerts -->
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
         @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
         @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
-<p>
-    @Html.ActionLink("Create New Category", "Create", null, new { @class = "btn btn-primary" })
-</p>
-
+<!-- Categories Table -->
 @if (Model != null && Model.Any())
 {
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
-                <th>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@(item.UpdatedAt.HasValue ? item.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
-                    <td>
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-xs" })
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-xs" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th><i class="bi bi-tag"></i> Name</th>
+                            <th><i class="bi bi-calendar-plus"></i> Created At</th>
+                            <th><i class="bi bi-calendar-check"></i> Updated At</th>
+                            <th class="text-center"><i class="bi bi-gear"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="category-row">
+                                <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
+                                <td><small class="text-muted">@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small></td>
+                                <td><small class="text-muted">@(item.UpdatedAt.HasValue ? item.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm") : "-")</small></td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-info", title = "View Details" })
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-warning", title = "Edit" })
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger", title = "Delete" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <div class="alert alert-info">
-        <strong>No categories found.</strong> Create a new category to get started.
+    <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #dee2e6;"></i>
+            <h4 class="mt-3">No categories found</h4>
+            <p class="text-muted">Create a new category to organize your products.</p>
+            @Html.ActionLink("Create New Category", "Create", null, new { @class = "btn btn-primary mt-2" })
+        </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        // Add smooth transitions and hover effects
+        document.querySelectorAll('.category-row').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.transition = 'transform 0.2s ease';
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.backgroundColor = '';
+            });
+        });
+    </script>
 }

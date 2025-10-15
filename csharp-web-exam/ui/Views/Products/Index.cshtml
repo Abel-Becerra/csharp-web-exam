@@ -4,135 +4,207 @@
     ViewBag.Title = "Products";
 }
 
-<h2>Products</h2>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Products</li>
+    </ol>
+</nav>
 
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-0"><i class="bi bi-box-seam"></i> Product Management</h1>
+        <p class="text-muted mb-0">Manage your product catalog</p>
+    </div>
+    <div>
+        @Html.ActionLink("Create New Product", "Create", null, new { @class = "btn btn-primary btn-lg" })
+    </div>
+</div>
+
+<!-- Alerts -->
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
         @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
         @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
-<p>
-    @Html.ActionLink("Create New Product", "Create", null, new { @class = "btn btn-primary" })
-</p>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Search and Filter</h3>
+<!-- Search and Filter Card -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-funnel"></i> Search and Filter</h5>
     </div>
-    <div class="panel-body">
-        @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { @class = "form-inline" }))
+    <div class="card-body">
+        @using (Html.BeginForm("Index", "Products", FormMethod.Get))
         {
-            <div class="form-group">
-                <label for="search">Search:</label>
-                <input type="text" name="search" value="@Model.SearchTerm" class="form-control" placeholder="Product name..." />
-            </div>
-            
-            <div class="form-group">
-                <label for="categoryId">Category:</label>
-                <select name="categoryId" class="form-control">
-                    <option value="">All Categories</option>
-                    @if (Model.Categories != null)
-                    {
-                        foreach (var category in Model.Categories)
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="search" class="form-label"><i class="bi bi-search"></i> Search</label>
+                    <input type="text" name="search" value="@Model.SearchTerm" class="form-control" placeholder="Search by product name..." />
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="categoryId" class="form-label"><i class="bi bi-tag"></i> Category</label>
+                    <select name="categoryId" class="form-select">
+                        <option value="">All Categories</option>
+                        @if (Model.Categories != null)
                         {
-                            <option value="@category.Id" @(Model.CategoryId == category.Id ? "selected" : "")>@category.Name</option>
+                            foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id" @(Model.CategoryId == category.Id ? "selected" : "")>@category.Name</option>
+                            }
                         }
-                    }
-                </select>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="sortBy" class="form-label"><i class="bi bi-sort-down"></i> Sort By</label>
+                    <select name="sortBy" class="form-select">
+                        <option value="">Default</option>
+                        <option value="name" @(Model.SortBy == "name" ? "selected" : "")>Name</option>
+                        <option value="price" @(Model.SortBy == "price" ? "selected" : "")>Price</option>
+                        <option value="category" @(Model.SortBy == "category" ? "selected" : "")>Category</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-2">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <div class="form-check">
+                        <input type="checkbox" name="sortDesc" value="true" @(Model.SortDescending ? "checked" : "") class="form-check-input" id="sortDesc" />
+                        <label class="form-check-label" for="sortDesc">Descending</label>
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="sortBy">Sort By:</label>
-                <select name="sortBy" class="form-control">
-                    <option value="">Default</option>
-                    <option value="name" @(Model.SortBy == "name" ? "selected" : "")>Name</option>
-                    <option value="price" @(Model.SortBy == "price" ? "selected" : "")>Price</option>
-                    <option value="category" @(Model.SortBy == "category" ? "selected" : "")>Category</option>
-                </select>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-funnel-fill"></i> Apply Filters</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary"><i class="bi bi-x-circle"></i> Clear</a>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" name="sortDesc" value="true" @(Model.SortDescending ? "checked" : "") /> Descending
-                </label>
-            </div>
-            
-            <button type="submit" class="btn btn-default">Filter</button>
-            <a href="@Url.Action("Index")" class="btn btn-link">Clear</a>
         }
     </div>
 </div>
 
+<!-- Products Table -->
 @if (Model.Products != null && Model.Products.Any())
 {
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Created At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Products)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
-                    <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-xs" })
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-xs" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th><i class="bi bi-box"></i> Name</th>
+                            <th><i class="bi bi-currency-dollar"></i> Price</th>
+                            <th><i class="bi bi-tag"></i> Category</th>
+                            <th><i class="bi bi-calendar"></i> Created At</th>
+                            <th class="text-center"><i class="bi bi-gear"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
+                                <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
+                                <td><span class="badge bg-success">$@Html.DisplayFor(modelItem => item.Price)</span></td>
+                                <td><span class="badge bg-info">@Html.DisplayFor(modelItem => item.CategoryName)</span></td>
+                                <td><small class="text-muted">@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small></td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-info", title = "View Details" })
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-warning", title = "Edit" })
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger", title = "Delete" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <div class="row">
+    <!-- Pagination - Improved -->
+    <div class="row mt-4 align-items-center">
         <div class="col-md-6">
-            <p>Showing @Model.Products.Count of @Model.TotalCount products</p>
+            <p class="text-muted mb-0">
+                <i class="bi bi-info-circle"></i> 
+                Showing <strong>@Model.Products.Count</strong> of <strong>@Model.TotalCount</strong> products
+                <span class="badge bg-light text-dark ms-2">Page @Model.Page of @Model.TotalPages</span>
+            </p>
         </div>
         <div class="col-md-6">
             <nav aria-label="Page navigation">
-                <ul class="pagination pull-right">
+                <ul class="pagination justify-content-end mb-0">
+                    @* First Page *@
                     @if (Model.Page > 1)
                     {
-                        <li>
-                            <a href="@Url.Action("Index", new { page = Model.Page - 1, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" title="First Page">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.Page - 1, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" title="Previous">
+                                <i class="bi bi-chevron-left"></i>
                             </a>
                         </li>
                     }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-double-left"></i></span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                        </li>
+                    }
 
+                    @* Page Numbers *@
                     @for (int i = Math.Max(1, Model.Page - 2); i <= Math.Min(Model.TotalPages, Model.Page + 2); i++)
                     {
-                        <li class="@(i == Model.Page ? "active" : "")">
-                            <a href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })">@i</a>
+                        <li class="page-item @(i == Model.Page ? "active" : "")">
+                            <a class="page-link @(i == Model.Page ? "fw-bold" : "")" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })">
+                                @i
+                            </a>
                         </li>
                     }
 
+                    @* Last Page *@
                     @if (Model.Page < Model.TotalPages)
                     {
-                        <li>
-                            <a href="@Url.Action("Index", new { page = Model.Page + 1, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.Page + 1, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" title="Next">
+                                <i class="bi bi-chevron-right"></i>
                             </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.TotalPages, pageSize = Model.PageSize, search = Model.SearchTerm, categoryId = Model.CategoryId, sortBy = Model.SortBy, sortDesc = Model.SortDescending })" title="Last Page">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-double-right"></i></span>
                         </li>
                     }
                 </ul>
@@ -142,7 +214,29 @@
 }
 else
 {
-    <div class="alert alert-info">
-        <strong>No products found.</strong> Try adjusting your search criteria or create a new product.
+    <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #dee2e6;"></i>
+            <h4 class="mt-3">No products found</h4>
+            <p class="text-muted">Try adjusting your search criteria or create a new product to get started.</p>
+            @Html.ActionLink("Create New Product", "Create", null, new { @class = "btn btn-primary mt-2" })
+        </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        // Add smooth transitions and hover effects - Consistent with other pages
+        document.querySelectorAll('.table tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.transition = 'transform 0.2s ease';
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.backgroundColor = '';
+            });
+        });
+    </script>
 }
