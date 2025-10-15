@@ -26,6 +26,19 @@
                     <li>@Html.ActionLink("Grouped Report", "Grouped", "Products")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["Username"] != null)
+                    {
+                        <li class="navbar-text">
+                            <span class="glyphicon glyphicon-user"></span> @Session["Username"]
+                        </li>
+                        <li>@Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "btn btn-link navbar-btn" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>
