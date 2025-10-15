@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace csharp_web_exam.Services
 {
-    public class ApiClient
+    public class ApiClient : IApiClient
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(ApiClient));
         private readonly HttpClient _httpClient;
