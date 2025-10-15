@@ -35,8 +35,8 @@ Este proyecto incluye un sistema completo de configuración por ambientes y perf
   - Scripts PowerShell para CI/CD
 
 ### 📊 Resúmenes
-- **[PUBLISH_PROFILES_SUMMARY.md](../../PUBLISH_PROFILES_SUMMARY.md)** - Resumen ejecutivo de perfiles
-- **[UI_CONFIGURATION_CHANGES.md](../../UI_CONFIGURATION_CHANGES.md)** - Resumen de cambios realizados
+- **[PUBLISH_PROFILES_SUMMARY.md](../../Deployment/PUBLISH_PROFILES_SUMMARY.md)** - Resumen ejecutivo de perfiles
+- **[UI_CONFIGURATION_CHANGES.md](../../Deployment/UI_CONFIGURATION_CHANGES.md)** - Resumen de cambios realizados
 
 ## 🎯 Ambientes Disponibles
 

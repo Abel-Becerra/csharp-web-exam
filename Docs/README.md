@@ -17,6 +17,12 @@ Instructions for end users and API consumers:
 ### 🛠️ [Implementation Guide](Implementation/README.md) ⭐
 Setup, configuration, and deployment:
 - **[Environment Configuration](Implementation/ENVIRONMENT_CONFIGURATION.md)** - Multi-environment setup
+- **[UI Implementation](Implementation/UI/README.md)** - UI configuration and deployment
+
+### 🚀 [Deployment Documentation](Deployment/README.md) ⭐
+Deployment and publishing guides:
+- **[Publish Profiles Summary](Deployment/PUBLISH_PROFILES_SUMMARY.md)** - Deployment profiles overview
+- **[UI Configuration Changes](Deployment/UI_CONFIGURATION_CHANGES.md)** - Configuration changes summary
 
 ### 🔐 [Security Documentation](Security/README.md) ⭐
 Security implementation and best practices:
@@ -38,6 +44,8 @@ High-level overviews:
 ### 🧪 [Test Documentation](Tests/README.md)
 Testing strategy and coverage:
 - **[Test Overview](Tests/README.md)** - Testing approach and results
+- **[UI Tests Fix Summary](Tests/UI_TESTS_FIX_SUMMARY.md)** - UI tests fixes
+- **[Compliance Analysis](Tests/COMPLIANCE_ANALYSIS.md)** - Compliance testing
 
 ---
 
@@ -79,12 +87,13 @@ Internal development documentation (commits, technical details, testing internal
 
 ### User-Facing Documentation
 - **User Guides**: 4 documents
-- **Implementation**: 2 documents
+- **Implementation**: 3 documents (+ 5 UI docs)
+- **Deployment**: 3 documents
 - **Security**: 2 documents
 - **Architecture**: 3 documents
 - **Reference**: 2 documents
-- **Tests**: 1 document
-- **Total for Users**: 14 documents
+- **Tests**: 3 documents
+- **Total for Users**: 25 documents
 
 ### Development Documentation
 - **Commits**: 9 documents
@@ -93,7 +102,7 @@ Internal development documentation (commits, technical details, testing internal
 - **Implementation Tracking**: 3 documents
 - **Total for Developers**: 22+ documents
 
-**Grand Total**: 36+ markdown files organized by audience
+**Grand Total**: 47+ markdown files organized by audience
 
 ## 🔄 Documentation Updates
 

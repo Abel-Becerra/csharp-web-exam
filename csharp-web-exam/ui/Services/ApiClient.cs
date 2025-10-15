@@ -1,14 +1,14 @@
+using csharp_web_exam.Configuration;
+using csharp_web_exam.Models;
+using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using csharp_web_exam.Models;
-using log4net;
-using Newtonsoft.Json;
 
 namespace csharp_web_exam.Services
 {
@@ -20,7 +20,7 @@ namespace csharp_web_exam.Services
 
         public ApiClient()
         {
-            _baseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"] ?? "https://localhost:5001/api";
+            _baseUrl = AppSettings.ApiBaseUrl;
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(_baseUrl),
@@ -28,6 +28,8 @@ namespace csharp_web_exam.Services
             };
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            _log.Info($"ApiClient initialized with base URL: {_baseUrl}");
             
             // Agregar token JWT si existe
             SetAuthorizationHeader();
