@@ -120,7 +120,7 @@
                         {
                             <tr>
                                 <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
-                                <td><span class="badge bg-success">$@Html.DisplayFor(modelItem => item.Price)</span></td>
+                                <td><span class="badge bg-success">@Html.DisplayFor(modelItem => item.Price)</span></td>
                                 <td><span class="badge bg-info">@Html.DisplayFor(modelItem => item.CategoryName)</span></td>
                                 <td><small class="text-muted">@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small></td>
                                 <td class="text-center">
