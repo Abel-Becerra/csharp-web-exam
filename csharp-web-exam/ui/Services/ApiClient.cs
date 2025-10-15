@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using csharp_web_exam.Models;
 using log4net;
 using Newtonsoft.Json;
@@ -27,7 +28,62 @@ namespace csharp_web_exam.Services
             };
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            // Agregar token JWT si existe
+            SetAuthorizationHeader();
         }
+
+        private void SetAuthorizationHeader()
+        {
+            try
+            {
+                var token = HttpContext.Current?.Request.Cookies["AuthToken"]?.Value;
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    _log.Debug("Authorization header set with JWT token");
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Warn("Could not set authorization header", ex);
+            }
+        }
+
+        #region Authentication
+
+        public async Task<LoginResponse> LoginAsync(string username, string password)
+        {
+            try
+            {
+                _log.Info($"Attempting login for user: {username}");
+                var loginRequest = new { Username = username, Password = password };
+                var json = JsonConvert.SerializeObject(loginRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                
+                var response = await _httpClient.PostAsync("/api/auth/login", content);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
+                    _log.Info($"Login successful for user: {username}");
+                    return loginResponse;
+                }
+                else
+                {
+                    _log.Warn($"Login failed for user: {username}. Status: {response.StatusCode}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"Error during login for user: {username}", ex);
+                throw;
+            }
+        }
+
+        #endregion
 
         #region Categories
 
