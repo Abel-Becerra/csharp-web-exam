@@ -27,6 +27,7 @@
     <Compile Include="..\ui\Models\*.cs" Link="LinkedFiles\Models\%(Filename)%(Extension)" />
     <Compile Include="..\ui\Services\*.cs" Link="LinkedFiles\Services\%(Filename)%(Extension)" />
     <Compile Include="..\ui\Filters\*.cs" Link="LinkedFiles\Filters\%(Filename)%(Extension)" />
+    <Compile Include="..\ui\Configuration\*.cs" Link="LinkedFiles\Configuration\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
