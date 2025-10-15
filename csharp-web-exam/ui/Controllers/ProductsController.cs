@@ -14,7 +14,11 @@ namespace csharp_web_exam.Controllers
         private static readonly ILog _log = LogManager.GetLogger(typeof(ProductsController));
         private readonly IApiClient _apiClient;
 
-        public ProductsController(IApiClient apiClient = null)
+        public ProductsController() : this(null)
+        {
+        }
+
+        public ProductsController(IApiClient apiClient)
         {
             _apiClient = apiClient ?? new ApiClient();
         }

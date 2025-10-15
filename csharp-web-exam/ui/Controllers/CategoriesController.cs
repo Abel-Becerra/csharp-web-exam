@@ -14,7 +14,11 @@ namespace csharp_web_exam.Controllers
         private static readonly ILog _log = LogManager.GetLogger(typeof(CategoriesController));
         private readonly IApiClient _apiClient;
 
-        public CategoriesController(IApiClient apiClient = null)
+        public CategoriesController() : this(null)
+        {
+        }
+
+        public CategoriesController(IApiClient apiClient)
         {
             _apiClient = apiClient ?? new ApiClient();
         }
