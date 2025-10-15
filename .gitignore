@@ -192,6 +192,8 @@ bin/
 /csharp-web-exam/.vs/
 /csharp-web-exam/ui/obj/
 /csharp-web-exam/ui/bin/
+# Exception: Include Roslyn compilers required for build
+!/csharp-web-exam/ui/bin/roslyn/
 
 # SQLite databases (exclude all environments)
 *.db
