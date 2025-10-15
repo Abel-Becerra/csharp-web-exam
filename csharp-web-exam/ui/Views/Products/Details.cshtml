@@ -4,32 +4,57 @@
     ViewBag.Title = "Product Details";
 }
 
-<h2>Product Details</h2>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Products")"><i class="bi bi-box-seam"></i> Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Details</li>
+    </ol>
+</nav>
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
-        <dd>@Html.DisplayFor(model => model.Name)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Price)</dt>
-        <dd>@Html.DisplayFor(model => model.Price)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CategoryName)</dt>
-        <dd>@Html.DisplayFor(model => model.CategoryName)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
-        <dd>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</dd>
-
-        @if (Model.UpdatedAt.HasValue)
-        {
-            <dt>@Html.DisplayNameFor(model => model.UpdatedAt)</dt>
-            <dd>@Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss")</dd>
-        }
-    </dl>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-0"><i class="bi bi-info-circle"></i> Product Details</h1>
+        <p class="text-muted mb-0">View product information</p>
+    </div>
+    <div>
+        @Html.ActionLink("Back to Products", "Index", null, new { @class = "btn btn-outline-primary" })
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
-    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
-</p>
+
+<!-- Product Details Card -->
+<div class="card shadow-sm">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-box"></i> Product Information</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3"><i class="bi bi-tag"></i> Name</dt>
+            <dd class="col-sm-9"><strong>@Html.DisplayFor(model => model.Name)</strong></dd>
+
+            <dt class="col-sm-3"><i class="bi bi-currency-dollar"></i> Price</dt>
+            <dd class="col-sm-9"><span class="badge bg-success fs-6">$@Html.DisplayFor(model => model.Price)</span></dd>
+
+            <dt class="col-sm-3"><i class="bi bi-folder"></i> Category</dt>
+            <dd class="col-sm-9"><span class="badge bg-info fs-6">@Html.DisplayFor(model => model.CategoryName)</span></dd>
+
+            <dt class="col-sm-3"><i class="bi bi-calendar-plus"></i> Created At</dt>
+            <dd class="col-sm-9"><small class="text-muted">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</small></dd>
+
+            @if (Model.UpdatedAt.HasValue)
+            {
+                <dt class="col-sm-3"><i class="bi bi-calendar-check"></i> Updated At</dt>
+                <dd class="col-sm-9"><small class="text-muted">@Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss")</small></dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer bg-light">
+        <div class="d-flex gap-2">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-outline-warning" })
+            @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-outline-danger" })
+            @Html.ActionLink("Back to Products", "Index", null, new { @class = "btn btn-outline-primary" })
+        </div>
+    </div>
+</div>
