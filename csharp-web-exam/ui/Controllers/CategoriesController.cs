@@ -1,12 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using csharp_web_exam.Filters;
 using csharp_web_exam.Models;
 using csharp_web_exam.Services;
 using log4net;
 
 namespace csharp_web_exam.Controllers
 {
+    [AuthorizeUser]
     public class CategoriesController : Controller
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(CategoriesController));
