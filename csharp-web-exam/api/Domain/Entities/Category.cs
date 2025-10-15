@@ -12,7 +12,4 @@ public class Category
     public DateTime CreatedAt { get; set; }
     
     public DateTime? UpdatedAt { get; set; }
-    
-    // Navigation property
-    public ICollection<Product> Products { get; set; } = new List<Product>();
 }
