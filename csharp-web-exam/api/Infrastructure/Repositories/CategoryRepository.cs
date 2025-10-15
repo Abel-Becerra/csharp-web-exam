@@ -3,18 +3,14 @@ using api.Domain.Entities;
 using api.Infrastructure.Data;
 using Dapper;
 using log4net;
+using System.Data;
 
 namespace api.Infrastructure.Repositories;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryRepository(IDbConnectionFactory connectionFactory) : ICategoryRepository
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(CategoryRepository));
-    private readonly IDbConnectionFactory _connectionFactory;
-
-    public CategoryRepository(IDbConnectionFactory connectionFactory)
-    {
-        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-    }
+    private readonly IDbConnectionFactory _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
@@ -25,8 +21,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var categories = await connection.QueryAsync<Category>(sql);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            IEnumerable<Category> categories = await connection.QueryAsync<Category>(sql);
             _log.Debug($"Retrieved {categories.Count()} categories from database");
             return categories;
         }
@@ -46,8 +42,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var category = await connection.QuerySingleOrDefaultAsync<Category>(sql, new { Id = id });
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            Category? category = await connection.QuerySingleOrDefaultAsync<Category>(sql, new { Id = id });
             _log.Debug($"Retrieved category with ID {id}: {(category != null ? "Found" : "Not Found")}");
             return category;
         }
@@ -67,8 +63,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var id = await connection.ExecuteScalarAsync<int>(sql, category);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int id = await connection.ExecuteScalarAsync<int>(sql, category);
             _log.Debug($"Created category with ID {id}");
             return id;
         }
@@ -88,8 +84,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, category);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int rowsAffected = await connection.ExecuteAsync(sql, category);
             _log.Debug($"Updated category with ID {category.Id}: {rowsAffected} rows affected");
             return rowsAffected > 0;
         }
@@ -106,8 +102,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
             _log.Debug($"Deleted category with ID {id}: {rowsAffected} rows affected");
             return rowsAffected > 0;
         }
@@ -124,8 +120,8 @@ public class CategoryRepository : ICategoryRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var count = await connection.ExecuteScalarAsync<int>(sql, new { Id = id });
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int count = await connection.ExecuteScalarAsync<int>(sql, new { Id = id });
             return count > 0;
         }
         catch (Exception ex)

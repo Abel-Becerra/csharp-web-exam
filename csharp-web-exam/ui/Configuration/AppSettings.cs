@@ -32,7 +32,7 @@ namespace csharp_web_exam.Configuration
         /// <returns>Valor del setting como entero o el valor por defecto</returns>
         public static int GetSettingAsInt(string key, int defaultValue = 0)
         {
-            var value = ConfigurationManager.AppSettings[key];
+            string value = ConfigurationManager.AppSettings[key];
             return int.TryParse(value, out int result) ? result : defaultValue;
         }
 
@@ -44,7 +44,7 @@ namespace csharp_web_exam.Configuration
         /// <returns>Valor del setting como booleano o el valor por defecto</returns>
         public static bool GetSettingAsBool(string key, bool defaultValue = false)
         {
-            var value = ConfigurationManager.AppSettings[key];
+            string value = ConfigurationManager.AppSettings[key];
             return bool.TryParse(value, out bool result) ? result : defaultValue;
         }
     }

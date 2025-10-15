@@ -1,11 +1,10 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using csharp_web_exam.Controllers;
+using csharp_web_exam.Models;
+using csharp_web_exam.Services;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using csharp_web_exam.Controllers;
-using csharp_web_exam.Models;
-using csharp_web_exam.Services;
 
 namespace ui.tests.Controllers
 {
@@ -28,20 +27,20 @@ namespace ui.tests.Controllers
         public async Task Index_ReturnsViewResult_WithProductList()
         {
             // Arrange
-            var productsResult = new ProductListResult
+            ProductListResult productsResult = new()
             {
-                Items = new List<ProductViewModel>
-                {
-                    new ProductViewModel { Id = 1, Name = "Product 1", Price = 100 },
-                    new ProductViewModel { Id = 2, Name = "Product 2", Price = 200 }
-                },
+                Items =
+                [
+                    new() { Id = 1, Name = "Product 1", Price = 100 },
+                    new() { Id = 2, Name = "Product 2", Price = 200 }
+                ],
                 TotalCount = 2
             };
 
-            var categories = new List<CategoryViewModel>
-            {
+            List<CategoryViewModel> categories =
+            [
                 new CategoryViewModel { Id = 1, Name = "Category 1" }
-            };
+            ];
 
             _mockApiClient.Setup(x => x.GetProductsAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), 
                 It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<bool>()))
@@ -51,12 +50,12 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.Index() as ViewResult;
+            ViewResult result = await _controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result.Model, typeof(ProductListViewModel));
-            var model = result.Model as ProductListViewModel;
+            ProductListViewModel model = result.Model as ProductListViewModel;
             Assert.AreEqual(2, model.Products.Count);
         }
 
@@ -65,12 +64,12 @@ namespace ui.tests.Controllers
         {
             // Arrange
             string searchTerm = "Laptop";
-            var productsResult = new ProductListResult
+            ProductListResult productsResult = new()
             {
-                Items = new List<ProductViewModel>
-                {
-                    new ProductViewModel { Id = 1, Name = "Laptop", Price = 1000 }
-                },
+                Items =
+                [
+                    new() { Id = 1, Name = "Laptop", Price = 1000 }
+                ],
                 TotalCount = 1
             };
 
@@ -82,11 +81,11 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(new List<CategoryViewModel>());
 
             // Act
-            var result = await _controller.Index(search: searchTerm) as ViewResult;
+            ViewResult result = await _controller.Index(search: searchTerm) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
-            var model = result.Model as ProductListViewModel;
+            ProductListViewModel model = result.Model as ProductListViewModel;
             Assert.AreEqual(searchTerm, model.SearchTerm);
             _mockApiClient.Verify(x => x.GetProductsAsync(It.IsAny<int>(), It.IsAny<int>(), searchTerm, 
                 It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Once);
@@ -97,9 +96,9 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var productsResult = new ProductListResult
+            ProductListResult productsResult = new()
             {
-                Items = new List<ProductViewModel>(),
+                Items = [],
                 TotalCount = 0
             };
 
@@ -108,14 +107,14 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(productsResult);
 
             _mockApiClient.Setup(x => x.GetCategoriesAsync())
-                .ReturnsAsync(new List<CategoryViewModel>());
+                .ReturnsAsync([]);
 
             // Act
-            var result = await _controller.Index(categoryId: categoryId) as ViewResult;
+            ViewResult result = await _controller.Index(categoryId: categoryId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
-            var model = result.Model as ProductListViewModel;
+            ProductListViewModel model = result.Model as ProductListViewModel;
             Assert.AreEqual(categoryId, model.CategoryId);
             _mockApiClient.Verify(x => x.GetProductsAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), 
                 categoryId, It.IsAny<string>(), It.IsAny<bool>()), Times.Once);
@@ -130,18 +129,18 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int productId = 1;
-            var product = new ProductViewModel { Id = productId, Name = "Test Product", Price = 100 };
+            ProductViewModel product = new() { Id = productId, Name = "Test Product", Price = 100 };
 
             _mockApiClient.Setup(x => x.GetProductByIdAsync(productId))
                 .ReturnsAsync(product);
 
             // Act
-            var result = await _controller.Details(productId) as ViewResult;
+            ViewResult result = await _controller.Details(productId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result.Model, typeof(ProductViewModel));
-            var model = result.Model as ProductViewModel;
+            ProductViewModel model = result.Model as ProductViewModel;
             Assert.AreEqual(productId, model.Id);
         }
 
@@ -154,7 +153,7 @@ namespace ui.tests.Controllers
                 .ThrowsAsync(new System.Exception("Product not found"));
 
             // Act
-            var result = await _controller.Details(invalidId) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Details(invalidId) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -169,16 +168,16 @@ namespace ui.tests.Controllers
         public async Task Create_GET_ReturnsViewResult()
         {
             // Arrange
-            var categories = new List<CategoryViewModel>
-            {
+            List<CategoryViewModel> categories =
+            [
                 new CategoryViewModel { Id = 1, Name = "Category 1" }
-            };
+            ];
 
             _mockApiClient.Setup(x => x.GetCategoriesAsync())
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.Create() as ViewResult;
+            ViewResult result = await _controller.Create() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -189,14 +188,14 @@ namespace ui.tests.Controllers
         public async Task Create_POST_WithValidModel_RedirectsToIndex()
         {
             // Arrange
-            var product = new ProductViewModel
+            ProductViewModel product = new()
             {
                 Name = "New Product",
                 Price = 150,
                 CategoryId = 1
             };
 
-            var createdProduct = new ProductViewModel
+            ProductViewModel createdProduct = new()
             {
                 Id = 1,
                 Name = product.Name,
@@ -208,7 +207,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(createdProduct);
 
             // Act
-            var result = await _controller.Create(product) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Create(product) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -220,19 +219,19 @@ namespace ui.tests.Controllers
         public async Task Create_POST_WithInvalidModel_ReturnsView()
         {
             // Arrange
-            var product = new ProductViewModel();
+            ProductViewModel product = new();
             _controller.ModelState.AddModelError("Name", "Name is required");
 
-            var categories = new List<CategoryViewModel>
-            {
+            List<CategoryViewModel> categories =
+            [
                 new CategoryViewModel { Id = 1, Name = "Category 1" }
-            };
+            ];
 
             _mockApiClient.Setup(x => x.GetCategoriesAsync())
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.Create(product) as ViewResult;
+            ViewResult result = await _controller.Create(product) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -249,11 +248,11 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int productId = 1;
-            var product = new ProductViewModel { Id = productId, Name = "Test Product", Price = 100, CategoryId = 1 };
-            var categories = new List<CategoryViewModel>
-            {
-                new CategoryViewModel { Id = 1, Name = "Category 1" }
-            };
+            ProductViewModel product = new() { Id = productId, Name = "Test Product", Price = 100, CategoryId = 1 };
+            List<CategoryViewModel> categories =
+            [
+                new() { Id = 1, Name = "Category 1" }
+            ];
 
             _mockApiClient.Setup(x => x.GetProductByIdAsync(productId))
                 .ReturnsAsync(product);
@@ -262,7 +261,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.Edit(productId) as ViewResult;
+            ViewResult result = await _controller.Edit(productId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -274,7 +273,7 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int productId = 1;
-            var product = new ProductViewModel
+            ProductViewModel product = new()
             {
                 Id = productId,
                 Name = "Updated Product",
@@ -286,7 +285,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(true);
 
             // Act
-            var result = await _controller.Edit(productId, product) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Edit(productId, product) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -303,13 +302,13 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int productId = 1;
-            var product = new ProductViewModel { Id = productId, Name = "Test Product", Price = 100 };
+            ProductViewModel product = new() { Id = productId, Name = "Test Product", Price = 100 };
 
             _mockApiClient.Setup(x => x.GetProductByIdAsync(productId))
                 .ReturnsAsync(product);
 
             // Act
-            var result = await _controller.Delete(productId) as ViewResult;
+            ViewResult result = await _controller.Delete(productId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -326,7 +325,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(true);
 
             // Act
-            var result = await _controller.DeleteConfirmed(productId) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.DeleteConfirmed(productId) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -342,9 +341,9 @@ namespace ui.tests.Controllers
         public async Task Grouped_ReturnsViewResult_WithGroupedData()
         {
             // Arrange
-            var groupedProducts = new List<ProductGroupViewModel>
-            {
-                new ProductGroupViewModel
+            List<ProductGroupViewModel> groupedProducts =
+            [
+                new()
                 {
                     CategoryId = 1,
                     CategoryName = "Electronics",
@@ -354,18 +353,18 @@ namespace ui.tests.Controllers
                     MinPrice = 50,
                     MaxPrice = 200
                 }
-            };
+            ];
 
             _mockApiClient.Setup(x => x.GetProductsGroupedAsync())
                 .ReturnsAsync(groupedProducts);
 
             // Act
-            var result = await _controller.Grouped() as ViewResult;
+            ViewResult result = await _controller.Grouped() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result.Model, typeof(List<ProductGroupViewModel>));
-            var model = result.Model as List<ProductGroupViewModel>;
+            List<ProductGroupViewModel> model = result.Model as List<ProductGroupViewModel>;
             Assert.AreEqual(1, model.Count);
         }
 

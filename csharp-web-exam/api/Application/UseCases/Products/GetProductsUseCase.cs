@@ -4,15 +4,10 @@ using log4net;
 
 namespace api.Application.UseCases.Products;
 
-public class GetProductsUseCase
+public class GetProductsUseCase(IProductService productService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(GetProductsUseCase));
-    private readonly IProductService _productService;
-
-    public GetProductsUseCase(IProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
+    private readonly IProductService _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
     public async Task<PaginatedResultDto<ProductDto>> ExecuteAsync(int page, int pageSize, string? searchTerm, int? categoryId, string? sortBy, bool sortDescending = false)
     {
@@ -20,7 +15,7 @@ public class GetProductsUseCase
         
         try
         {
-            var products = await _productService.GetProductsAsync(page, pageSize, searchTerm, categoryId, sortBy, sortDescending);
+            PaginatedResultDto<ProductDto> products = await _productService.GetProductsAsync(page, pageSize, searchTerm, categoryId, sortBy, sortDescending);
             _log.Info($"Retrieved {products.TotalCount} products (Page {page} of {products.TotalPages})");
             return products;
         }

@@ -18,12 +18,12 @@ public class ProductEndpointsTests
     public async Task GetAllProducts_ReturnsPagedResults()
     {
         // Arrange
-        var products = new List<ProductDto>
-        {
+        List<ProductDto> products =
+        [
             new() { Id = 1, Name = "Laptop", Price = 999.99m },
             new() { Id = 2, Name = "Mouse", Price = 29.99m }
-        };
-        var pagedResult = new PaginatedResultDto<ProductDto>
+        ];
+        PaginatedResultDto<ProductDto> pagedResult = new()
         {
             Items = products,
             TotalCount = 2,
@@ -31,10 +31,10 @@ public class ProductEndpointsTests
             PageSize = 10
         };
         _mockService.Setup(s => s.GetProductsAsync(1, 10, null, null, null, false)).ReturnsAsync(pagedResult);
-        var useCase = new GetProductsUseCase(_mockService.Object);
+        GetProductsUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1, 10, null, null, null, false);
+        PaginatedResultDto<ProductDto> result = await useCase.ExecuteAsync(1, 10, null, null, null, false);
 
         // Assert
         Assert.NotNull(result);
@@ -46,12 +46,12 @@ public class ProductEndpointsTests
     public async Task GetProductById_ExistingId_ReturnsProduct()
     {
         // Arrange
-        var product = new ProductDto { Id = 1, Name = "Laptop", Price = 999.99m };
+        ProductDto product = new() { Id = 1, Name = "Laptop", Price = 999.99m };
         _mockService.Setup(s => s.GetProductByIdAsync(1)).ReturnsAsync(product);
-        var useCase = new GetProductByIdUseCase(_mockService.Object);
+        GetProductByIdUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1);
+        ProductDto? result = await useCase.ExecuteAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -64,10 +64,10 @@ public class ProductEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.GetProductByIdAsync(999)).ReturnsAsync((ProductDto?)null);
-        var useCase = new GetProductByIdUseCase(_mockService.Object);
+        GetProductByIdUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999);
+        ProductDto? result = await useCase.ExecuteAsync(999);
 
         // Assert
         Assert.Null(result);
@@ -77,13 +77,13 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ValidDto_ReturnsCreated()
     {
         // Arrange
-        var createDto = new CreateProductDto { Name = "Keyboard", Price = 79.99m, CategoryId = 1 };
-        var createdDto = new ProductDto { Id = 1, Name = "Keyboard", Price = 79.99m, CategoryId = 1 };
+        CreateProductDto createDto = new() { Name = "Keyboard", Price = 79.99m, CategoryId = 1 };
+        ProductDto createdDto = new() { Id = 1, Name = "Keyboard", Price = 79.99m, CategoryId = 1 };
         _mockService.Setup(s => s.CreateProductAsync(createDto)).ReturnsAsync(createdDto);
-        var useCase = new CreateProductUseCase(_mockService.Object);
+        CreateProductUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(createDto);
+        ProductDto result = await useCase.ExecuteAsync(createDto);
 
         // Assert
         Assert.NotNull(result);
@@ -96,12 +96,12 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ValidDto_ReturnsTrue()
     {
         // Arrange
-        var updateDto = new UpdateProductDto { Name = "Updated", Price = 199.99m, CategoryId = 1 };
+        UpdateProductDto updateDto = new() { Name = "Updated", Price = 199.99m, CategoryId = 1 };
         _mockService.Setup(s => s.UpdateProductAsync(1, updateDto)).ReturnsAsync(true);
-        var useCase = new UpdateProductUseCase(_mockService.Object);
+        UpdateProductUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1, updateDto);
+        bool result = await useCase.ExecuteAsync(1, updateDto);
 
         // Assert
         Assert.True(result);
@@ -111,12 +111,12 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_NonExistingId_ReturnsFalse()
     {
         // Arrange
-        var updateDto = new UpdateProductDto { Name = "Updated", Price = 199.99m, CategoryId = 1 };
+        UpdateProductDto updateDto = new() { Name = "Updated", Price = 199.99m, CategoryId = 1 };
         _mockService.Setup(s => s.UpdateProductAsync(999, updateDto)).ReturnsAsync(false);
-        var useCase = new UpdateProductUseCase(_mockService.Object);
+        UpdateProductUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999, updateDto);
+        bool result = await useCase.ExecuteAsync(999, updateDto);
 
         // Assert
         Assert.False(result);
@@ -127,10 +127,10 @@ public class ProductEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.DeleteProductAsync(1)).ReturnsAsync(true);
-        var useCase = new DeleteProductUseCase(_mockService.Object);
+        DeleteProductUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1);
+        bool result = await useCase.ExecuteAsync(1);
 
         // Assert
         Assert.True(result);
@@ -141,10 +141,10 @@ public class ProductEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.DeleteProductAsync(999)).ReturnsAsync(false);
-        var useCase = new DeleteProductUseCase(_mockService.Object);
+        DeleteProductUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999);
+        bool result = await useCase.ExecuteAsync(999);
 
         // Assert
         Assert.False(result);
@@ -154,21 +154,21 @@ public class ProductEndpointsTests
     public async Task GetGroupedProducts_ReturnsGroupedData()
     {
         // Arrange
-        var groupedData = new List<ProductGroupDto>
-        {
-            new ProductGroupDto 
+        List<ProductGroupDto> groupedData =
+        [
+            new() 
             { 
                 CategoryName = "Electronics", 
                 ProductCount = 5, 
                 TotalValue = 2500m, 
                 AveragePrice = 500m 
             }
-        };
+        ];
         _mockService.Setup(s => s.GetProductsGroupedByCategoryAsync()).ReturnsAsync(groupedData);
-        var useCase = new GetGroupedProductsUseCase(_mockService.Object);
+        GetGroupedProductsUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync();
+        IEnumerable<ProductGroupDto> result = await useCase.ExecuteAsync();
 
         // Assert
         Assert.NotNull(result);

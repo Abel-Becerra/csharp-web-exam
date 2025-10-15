@@ -1,8 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using csharp_web_exam.Filters;
 using Moq;
 using System.Web;
 using System.Web.Mvc;
-using csharp_web_exam.Filters;
 
 namespace ui.tests.Filters
 {
@@ -53,8 +52,7 @@ namespace ui.tests.Filters
         public void AuthorizeCore_WithValidTokenAndSession_ReturnsTrue()
         {
             // Arrange
-            var cookies = new HttpCookieCollection();
-            cookies.Add(new HttpCookie("AuthToken", "valid-token"));
+            HttpCookieCollection cookies = [new HttpCookie("AuthToken", "valid-token")];
             _mockRequest.Setup(r => r.Cookies).Returns(cookies);
             _mockSession.Setup(s => s["Username"]).Returns("testuser");
 
@@ -83,8 +81,10 @@ namespace ui.tests.Filters
         public void AuthorizeCore_WithTokenButNoSession_ReturnsFalse()
         {
             // Arrange
-            var cookies = new HttpCookieCollection();
-            cookies.Add(new HttpCookie("AuthToken", "valid-token"));
+            HttpCookieCollection cookies =
+            [
+                new HttpCookie("AuthToken", "valid-token")
+            ];
             _mockRequest.Setup(r => r.Cookies).Returns(cookies);
             _mockSession.Setup(s => s["Username"]).Returns(null);
 
@@ -113,8 +113,10 @@ namespace ui.tests.Filters
         public void AuthorizeCore_WithEmptyToken_ReturnsFalse()
         {
             // Arrange
-            var cookies = new HttpCookieCollection();
-            cookies.Add(new HttpCookie("AuthToken", ""));
+            HttpCookieCollection cookies =
+            [
+                new HttpCookie("AuthToken", "")
+            ];
             _mockRequest.Setup(r => r.Cookies).Returns(cookies);
             _mockSession.Setup(s => s["Username"]).Returns("testuser");
 
@@ -129,8 +131,10 @@ namespace ui.tests.Filters
         public void AuthorizeCore_WithEmptyUsername_ReturnsFalse()
         {
             // Arrange
-            var cookies = new HttpCookieCollection();
-            cookies.Add(new HttpCookie("AuthToken", "valid-token"));
+            HttpCookieCollection cookies =
+            [
+                new HttpCookie("AuthToken", "valid-token")
+            ];
             _mockRequest.Setup(r => r.Cookies).Returns(cookies);
             _mockSession.Setup(s => s["Username"]).Returns("");
 
@@ -158,19 +162,19 @@ namespace ui.tests.Filters
         public void HandleUnauthorizedRequest_RedirectsToLogin()
         {
             // Arrange
-            var mockController = new Mock<ControllerBase>();
-            var routeData = new System.Web.Routing.RouteData();
+            Mock<ControllerBase> mockController = new();
+            System.Web.Routing.RouteData routeData = new();
             routeData.Values.Add("controller", "Products");
             routeData.Values.Add("action", "Index");
 
-            var controllerContext = new ControllerContext(
+            ControllerContext controllerContext = new(
                 _mockHttpContext.Object,
                 routeData,
                 mockController.Object
             );
 
-            var mockActionDescriptor = new Mock<ActionDescriptor>();
-            var authContext = new AuthorizationContext(controllerContext, mockActionDescriptor.Object);
+            Mock<ActionDescriptor> mockActionDescriptor = new();
+            AuthorizationContext authContext = new(controllerContext, mockActionDescriptor.Object);
 
             // Act
             _filter.TestHandleUnauthorizedRequest(authContext);
@@ -178,8 +182,8 @@ namespace ui.tests.Filters
             // Assert
             Assert.IsNotNull(authContext.Result, "Result should be set");
             Assert.IsInstanceOfType(authContext.Result, typeof(RedirectToRouteResult), "Should redirect to route");
-            
-            var redirectResult = authContext.Result as RedirectToRouteResult;
+
+            RedirectToRouteResult redirectResult = authContext.Result as RedirectToRouteResult;
             Assert.AreEqual("Account", redirectResult.RouteValues["controller"], "Should redirect to Account controller");
             Assert.AreEqual("Login", redirectResult.RouteValues["action"], "Should redirect to Login action");
             Assert.IsNotNull(redirectResult.RouteValues["returnUrl"], "Should include returnUrl");

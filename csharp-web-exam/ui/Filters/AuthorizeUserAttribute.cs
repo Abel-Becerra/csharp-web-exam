@@ -15,8 +15,8 @@ namespace csharp_web_exam.Filters
             }
 
             // Verificar si existe el token en la cookie
-            var token = httpContext.Request.Cookies["AuthToken"]?.Value;
-            var username = httpContext.Session["Username"] as string;
+            string token = httpContext.Request.Cookies["AuthToken"]?.Value;
+            string username = httpContext.Session["Username"] as string;
 
             return !string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(username);
         }

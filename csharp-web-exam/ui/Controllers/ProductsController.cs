@@ -1,10 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using csharp_web_exam.Filters;
 using csharp_web_exam.Models;
 using csharp_web_exam.Services;
 using log4net;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace csharp_web_exam.Controllers
 {
@@ -30,10 +31,10 @@ namespace csharp_web_exam.Controllers
             {
                 _log.Info($"Loading products index - Page: {page}, Search: {search}, CategoryId: {categoryId}");
 
-                var productsResult = await _apiClient.GetProductsAsync(page, pageSize, search, categoryId, sortBy, sortDesc);
-                var categories = await _apiClient.GetCategoriesAsync();
+                ProductListResult productsResult = await _apiClient.GetProductsAsync(page, pageSize, search, categoryId, sortBy, sortDesc);
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
 
-                var viewModel = new ProductListViewModel
+                ProductListViewModel viewModel = new ProductListViewModel
                 {
                     Products = productsResult.Items,
                     TotalCount = productsResult.TotalCount,
@@ -63,7 +64,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info("Loading grouped products report");
-                var groups = await _apiClient.GetProductsGroupedAsync();
+                List<ProductGroupViewModel> groups = await _apiClient.GetProductsGroupedAsync();
                 return View(groups);
             }
             catch (Exception ex)
@@ -80,7 +81,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading product details for ID: {id}");
-                var product = await _apiClient.GetProductByIdAsync(id);
+                ProductViewModel product = await _apiClient.GetProductByIdAsync(id);
                 return View(product);
             }
             catch (Exception ex)
@@ -96,7 +97,7 @@ namespace csharp_web_exam.Controllers
         {
             try
             {
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name");
                 return View();
             }
@@ -123,7 +124,7 @@ namespace csharp_web_exam.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -131,7 +132,7 @@ namespace csharp_web_exam.Controllers
             {
                 _log.Error($"Error creating product: {product.Name}", ex);
                 TempData["Error"] = "Error creating product. Please try again.";
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -143,8 +144,8 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading edit form for product ID: {id}");
-                var product = await _apiClient.GetProductByIdAsync(id);
-                var categories = await _apiClient.GetCategoriesAsync();
+                ProductViewModel product = await _apiClient.GetProductByIdAsync(id);
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -171,7 +172,7 @@ namespace csharp_web_exam.Controllers
                     return RedirectToAction("Index");
                 }
 
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -179,7 +180,7 @@ namespace csharp_web_exam.Controllers
             {
                 _log.Error($"Error updating product ID: {id}", ex);
                 TempData["Error"] = "Error updating product. Please try again.";
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
                 return View(product);
             }
@@ -191,7 +192,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading delete confirmation for product ID: {id}");
-                var product = await _apiClient.GetProductByIdAsync(id);
+                ProductViewModel product = await _apiClient.GetProductByIdAsync(id);
                 return View(product);
             }
             catch (Exception ex)

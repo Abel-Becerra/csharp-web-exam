@@ -30,7 +30,7 @@ public static class ProductEndpoints
             _log.Info($"GET /api/products - Page: {page}, PageSize: {pageSize}, Search: {search}, CategoryId: {categoryId}, SortBy: {sortBy}, SortDesc: {sortDesc}");
             try
             {
-                var result = await useCase.ExecuteAsync(page, pageSize, search, categoryId, sortBy, sortDesc);
+                PaginatedResultDto<ProductDto> result = await useCase.ExecuteAsync(page, pageSize, search, categoryId, sortBy, sortDesc);
                 _log.Info($"Successfully retrieved {result.Items.Count()} products (Total: {result.TotalCount})");
                 return Results.Ok(result);
             }
@@ -53,7 +53,7 @@ public static class ProductEndpoints
             _log.Info("GET /api/products/grouped - Retrieving products grouped by category");
             try
             {
-                var groups = await useCase.ExecuteAsync();
+                IEnumerable<ProductGroupDto> groups = await useCase.ExecuteAsync();
                 _log.Info($"Successfully retrieved {groups.Count()} product groups");
                 return Results.Ok(groups);
             }
@@ -76,7 +76,7 @@ public static class ProductEndpoints
             _log.Info($"GET /api/products/{id} - Retrieving product");
             try
             {
-                var product = await useCase.ExecuteAsync(id);
+                ProductDto? product = await useCase.ExecuteAsync(id);
                 if (product == null)
                 {
                     _log.Warn($"Product with ID {id} not found");
@@ -106,7 +106,7 @@ public static class ProductEndpoints
             _log.Info($"POST /api/products - Creating new product: {createDto.Name}");
             try
             {
-                var product = await useCase.ExecuteAsync(createDto);
+                ProductDto product = await useCase.ExecuteAsync(createDto);
                 _log.Info($"Successfully created product with ID {product.Id}");
                 return Results.CreatedAtRoute("GetProductById", new { id = product.Id }, product);
             }
@@ -135,7 +135,7 @@ public static class ProductEndpoints
             _log.Info($"PUT /api/products/{id} - Updating product");
             try
             {
-                var success = await useCase.ExecuteAsync(id, updateDto);
+                bool success = await useCase.ExecuteAsync(id, updateDto);
                 if (!success)
                 {
                     _log.Warn($"Product with ID {id} not found for update");
@@ -171,7 +171,7 @@ public static class ProductEndpoints
             _log.Info($"DELETE /api/products/{id} - Deleting product");
             try
             {
-                var success = await useCase.ExecuteAsync(id);
+                bool success = await useCase.ExecuteAsync(id);
                 if (!success)
                 {
                     _log.Warn($"Product with ID {id} not found for deletion");

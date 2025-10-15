@@ -3,15 +3,10 @@ using log4net;
 
 namespace api.Application.UseCases.Products;
 
-public class DeleteProductUseCase
+public class DeleteProductUseCase(IProductService productService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(DeleteProductUseCase));
-    private readonly IProductService _productService;
-
-    public DeleteProductUseCase(IProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
+    private readonly IProductService _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
     public async Task<bool> ExecuteAsync(int id)
     {
@@ -19,7 +14,7 @@ public class DeleteProductUseCase
         
         try
         {
-            var result = await _productService.DeleteProductAsync(id);
+            bool result = await _productService.DeleteProductAsync(id);
             
             if (result)
             {

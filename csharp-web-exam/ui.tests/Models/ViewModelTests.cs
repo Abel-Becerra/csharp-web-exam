@@ -1,9 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using System.Linq;
 using csharp_web_exam.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ui.tests.Models
 {
@@ -16,14 +15,14 @@ namespace ui.tests.Models
         public void LoginViewModel_WithValidData_PassesValidation()
         {
             // Arrange
-            var model = new LoginViewModel
+            LoginViewModel model = new()
             {
                 Username = "admin",
                 Password = "SampleEx4mF0rT3st!ñ"
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.AreEqual(0, validationResults.Count);
@@ -33,14 +32,14 @@ namespace ui.tests.Models
         public void LoginViewModel_WithoutUsername_FailsValidation()
         {
             // Arrange
-            var model = new LoginViewModel
+            LoginViewModel model = new()
             {
                 Username = null,
                 Password = "password"
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.IsTrue(validationResults.Count > 0);
@@ -51,14 +50,14 @@ namespace ui.tests.Models
         public void LoginViewModel_WithoutPassword_FailsValidation()
         {
             // Arrange
-            var model = new LoginViewModel
+            LoginViewModel model = new()
             {
                 Username = "admin",
                 Password = null
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.IsTrue(validationResults.Count > 0);
@@ -69,7 +68,7 @@ namespace ui.tests.Models
         public void LoginViewModel_RememberMe_DefaultsToFalse()
         {
             // Arrange
-            var model = new LoginViewModel();
+            LoginViewModel model = new();
 
             // Assert
             Assert.IsFalse(model.RememberMe);
@@ -83,7 +82,7 @@ namespace ui.tests.Models
         public void ProductViewModel_WithValidData_PassesValidation()
         {
             // Arrange
-            var model = new ProductViewModel
+            ProductViewModel model = new()
             {
                 Name = "Test Product",
                 Price = 100.00m,
@@ -92,7 +91,7 @@ namespace ui.tests.Models
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.AreEqual(0, validationResults.Count);
@@ -110,7 +109,7 @@ namespace ui.tests.Models
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.IsTrue(validationResults.Count > 0);
@@ -128,7 +127,7 @@ namespace ui.tests.Models
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.IsTrue(validationResults.Count > 0);
@@ -147,7 +146,7 @@ namespace ui.tests.Models
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.AreEqual(1, validationResults.Count); // Price must be greater than 0
@@ -162,14 +161,14 @@ namespace ui.tests.Models
         public void CategoryViewModel_WithValidData_PassesValidation()
         {
             // Arrange
-            var model = new CategoryViewModel
+            CategoryViewModel model = new()
             {
                 Name = "Electronics",
                 CreatedAt = DateTime.Now
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.AreEqual(0, validationResults.Count);
@@ -179,13 +178,13 @@ namespace ui.tests.Models
         public void CategoryViewModel_WithoutName_FailsValidation()
         {
             // Arrange
-            var model = new CategoryViewModel
+            CategoryViewModel model = new()
             {
                 Name = null
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.IsTrue(validationResults.Count > 0);
@@ -195,7 +194,7 @@ namespace ui.tests.Models
         public void CategoryViewModel_UpdatedAt_CanBeNull()
         {
             // Arrange
-            var model = new CategoryViewModel
+            CategoryViewModel model = new()
             {
                 Name = "Electronics",
                 CreatedAt = DateTime.Now,
@@ -203,7 +202,7 @@ namespace ui.tests.Models
             };
 
             // Act
-            var validationResults = ValidateModel(model);
+            IList<ValidationResult> validationResults = ValidateModel(model);
 
             // Assert
             Assert.AreEqual(0, validationResults.Count);
@@ -218,7 +217,7 @@ namespace ui.tests.Models
         public void ProductListViewModel_DefaultValues_AreCorrect()
         {
             // Arrange
-            var model = new ProductListViewModel();
+            ProductListViewModel model = new();
 
             // Assert
             Assert.AreEqual(0, model.Page); // Default int value is 0
@@ -233,7 +232,7 @@ namespace ui.tests.Models
         public void ProductListViewModel_TotalPages_IsNotCalculated()
         {
             // Arrange
-            var model = new ProductListViewModel
+            ProductListViewModel model = new()
             {
                 TotalCount = 50,
                 PageSize = 12,
@@ -251,13 +250,13 @@ namespace ui.tests.Models
         public void ProductListViewModel_WithProducts_StoresCorrectly()
         {
             // Arrange
-            var products = new List<ProductViewModel>
-            {
-                new ProductViewModel { Id = 1, Name = "Product 1" },
-                new ProductViewModel { Id = 2, Name = "Product 2" }
-            };
+            List<ProductViewModel> products =
+            [
+                new() { Id = 1, Name = "Product 1" },
+                new() { Id = 2, Name = "Product 2" }
+            ];
 
-            var model = new ProductListViewModel
+            ProductListViewModel model = new()
             {
                 Products = products
             };
@@ -274,7 +273,7 @@ namespace ui.tests.Models
         public void ProductGroupViewModel_AveragePrice_IsNotCalculated()
         {
             // Arrange
-            var model = new ProductGroupViewModel
+            ProductGroupViewModel model = new()
             {
                 CategoryName = "Electronics",
                 ProductCount = 10,
@@ -295,7 +294,7 @@ namespace ui.tests.Models
         public void ProductGroupViewModel_WithZeroProducts_HandlesGracefully()
         {
             // Arrange
-            var model = new ProductGroupViewModel
+            ProductGroupViewModel model = new()
             {
                 CategoryName = "Empty Category",
                 ProductCount = 0,

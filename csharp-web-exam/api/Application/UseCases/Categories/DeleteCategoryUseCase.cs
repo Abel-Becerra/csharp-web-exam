@@ -3,15 +3,10 @@ using log4net;
 
 namespace api.Application.UseCases.Categories;
 
-public class DeleteCategoryUseCase
+public class DeleteCategoryUseCase(ICategoryService categoryService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(DeleteCategoryUseCase));
-    private readonly ICategoryService _categoryService;
-
-    public DeleteCategoryUseCase(ICategoryService categoryService)
-    {
-        _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
-    }
+    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
 
     public async Task<bool> ExecuteAsync(int id)
     {
@@ -19,7 +14,7 @@ public class DeleteCategoryUseCase
         
         try
         {
-            var result = await _categoryService.DeleteCategoryAsync(id);
+            bool result = await _categoryService.DeleteCategoryAsync(id);
             
             if (result)
             {

@@ -21,11 +21,11 @@ public class GetCategoryByIdUseCaseTests
     public async Task ExecuteAsync_ExistingId_ReturnsCategory()
     {
         // Arrange
-        var category = new CategoryDto { Id = 1, Name = "Electronics" };
+        CategoryDto category = new() { Id = 1, Name = "Electronics" };
         _mockService.Setup(s => s.GetCategoryByIdAsync(1)).ReturnsAsync(category);
 
         // Act
-        var result = await _useCase.ExecuteAsync(1);
+        CategoryDto? result = await _useCase.ExecuteAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -41,7 +41,7 @@ public class GetCategoryByIdUseCaseTests
         _mockService.Setup(s => s.GetCategoryByIdAsync(999)).ReturnsAsync((CategoryDto?)null);
 
         // Act
-        var result = await _useCase.ExecuteAsync(999);
+        CategoryDto? result = await _useCase.ExecuteAsync(999);
 
         // Assert
         Assert.Null(result);

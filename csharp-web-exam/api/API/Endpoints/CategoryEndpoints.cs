@@ -22,7 +22,7 @@ public static class CategoryEndpoints
             _log.Info("GET /api/categories - Retrieving all categories");
             try
             {
-                var categories = await useCase.ExecuteAsync();
+                IEnumerable<CategoryDto> categories = await useCase.ExecuteAsync();
                 _log.Info($"Successfully retrieved {categories.Count()} categories");
                 return Results.Ok(categories);
             }
@@ -45,7 +45,7 @@ public static class CategoryEndpoints
             _log.Info($"GET /api/categories/{id} - Retrieving category");
             try
             {
-                var category = await useCase.ExecuteAsync(id);
+                CategoryDto? category = await useCase.ExecuteAsync(id);
                 if (category == null)
                 {
                     _log.Warn($"Category with ID {id} not found");
@@ -74,7 +74,7 @@ public static class CategoryEndpoints
             _log.Info($"POST /api/categories - Creating new category: {createDto.Name}");
             try
             {
-                var category = await useCase.ExecuteAsync(createDto);
+                CategoryDto category = await useCase.ExecuteAsync(createDto);
                 _log.Info($"Successfully created category with ID {category.Id}");
                 return Results.CreatedAtRoute("GetCategoryById", new { id = category.Id }, category);
             }
@@ -98,7 +98,7 @@ public static class CategoryEndpoints
             _log.Info($"PUT /api/categories/{id} - Updating category");
             try
             {
-                var success = await useCase.ExecuteAsync(id, updateDto);
+                bool success = await useCase.ExecuteAsync(id, updateDto);
                 if (!success)
                 {
                     _log.Warn($"Category with ID {id} not found for update");
@@ -129,7 +129,7 @@ public static class CategoryEndpoints
             _log.Info($"DELETE /api/categories/{id} - Deleting category");
             try
             {
-                var success = await useCase.ExecuteAsync(id);
+                bool success = await useCase.ExecuteAsync(id);
                 if (!success)
                 {
                     _log.Warn($"Category with ID {id} not found for deletion");

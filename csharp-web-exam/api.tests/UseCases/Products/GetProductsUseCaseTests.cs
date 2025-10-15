@@ -21,12 +21,12 @@ public class GetProductsUseCaseTests
     public async Task ExecuteAsync_ReturnsPagedProducts()
     {
         // Arrange
-        var products = new List<ProductDto>
-        {
+        List<ProductDto> products =
+        [
             new ProductDto { Id = 1, Name = "Laptop", Price = 999.99m },
             new ProductDto { Id = 2, Name = "Mouse", Price = 29.99m }
-        };
-        var pagedResult = new PaginatedResultDto<ProductDto>
+        ];
+        PaginatedResultDto<ProductDto> pagedResult = new()
         {
             Items = products,
             TotalCount = 2,
@@ -36,7 +36,7 @@ public class GetProductsUseCaseTests
         _mockService.Setup(s => s.GetProductsAsync(1, 10, null, null, null, false)).ReturnsAsync(pagedResult);
 
         // Act
-        var result = await _useCase.ExecuteAsync(1, 10, null, null, null, false);
+        PaginatedResultDto<ProductDto> result = await _useCase.ExecuteAsync(1, 10, null, null, null, false);
 
         // Assert
         Assert.NotNull(result);
@@ -49,11 +49,11 @@ public class GetProductsUseCaseTests
     public async Task ExecuteAsync_WithFilters_ReturnsFilteredProducts()
     {
         // Arrange
-        var products = new List<ProductDto>
-        {
-            new ProductDto { Id = 1, Name = "Laptop", Price = 999.99m, CategoryId = 1 }
-        };
-        var pagedResult = new PaginatedResultDto<ProductDto>
+        List<ProductDto> products =
+        [
+            new() { Id = 1, Name = "Laptop", Price = 999.99m, CategoryId = 1 }
+        ];
+        PaginatedResultDto<ProductDto> pagedResult = new()
         {
             Items = products,
             TotalCount = 1,
@@ -63,7 +63,7 @@ public class GetProductsUseCaseTests
         _mockService.Setup(s => s.GetProductsAsync(1, 10, "Laptop", 1, "price", true)).ReturnsAsync(pagedResult);
 
         // Act
-        var result = await _useCase.ExecuteAsync(1, 10, "Laptop", 1, "price", true);
+        PaginatedResultDto<ProductDto> result = await _useCase.ExecuteAsync(1, 10, "Laptop", 1, "price", true);
 
         // Assert
         Assert.NotNull(result);

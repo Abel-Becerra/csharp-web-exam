@@ -1,4 +1,3 @@
-using System.Web;
 using System.Web.Optimization;
 
 namespace csharp_web_exam
@@ -20,7 +19,7 @@ namespace csharp_web_exam
                         "~/Scripts/modernizr-*"));
 
             // Bootstrap 5 - Usar archivo pre-minificado para evitar errores de minificación
-            var bootstrapBundle = new ScriptBundle("~/bundles/bootstrap").Include(
+            Bundle bootstrapBundle = new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.bundle.min.js");
             bootstrapBundle.Transforms.Clear(); // No aplicar minificación adicional
             bundles.Add(bootstrapBundle);

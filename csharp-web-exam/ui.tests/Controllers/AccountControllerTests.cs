@@ -1,12 +1,11 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using csharp_web_exam.Controllers;
+using csharp_web_exam.Models;
+using csharp_web_exam.Services;
 using Moq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using csharp_web_exam.Controllers;
-using csharp_web_exam.Models;
-using csharp_web_exam.Services;
 
 namespace ui.tests.Controllers
 {
@@ -34,8 +33,8 @@ namespace ui.tests.Controllers
             _mockSession = new Mock<HttpSessionStateBase>();
 
             // Setup cookies
-            var requestCookies = new HttpCookieCollection();
-            var responseCookies = new HttpCookieCollection();
+            HttpCookieCollection requestCookies = [];
+            HttpCookieCollection responseCookies = [];
             
             _mockRequest.Setup(r => r.Cookies).Returns(requestCookies);
             _mockResponse.Setup(r => r.Cookies).Returns(responseCookies);
@@ -46,8 +45,8 @@ namespace ui.tests.Controllers
             _mockHttpContext.Setup(ctx => ctx.Session).Returns(_mockSession.Object);
 
             // Setup UrlHelper
-            var routeData = new RouteData();
-            var requestContext = new RequestContext(_mockHttpContext.Object, routeData);
+            RouteData routeData = new();
+            RequestContext requestContext = new(_mockHttpContext.Object, routeData);
             _controller.ControllerContext = new ControllerContext(requestContext, _controller);
             
             _mockUrlHelper = new Mock<UrlHelper>();
@@ -59,11 +58,11 @@ namespace ui.tests.Controllers
         public async Task Login_POST_WithInvalidModel_ReturnsView()
         {
             // Arrange
-            var model = new LoginViewModel();
+            LoginViewModel model = new();
             _controller.ModelState.AddModelError("Username", "Username is required");
 
             // Act
-            var result = await _controller.Login(model, null) as ViewResult;
+            ViewResult result = await _controller.Login(model, null) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -74,7 +73,7 @@ namespace ui.tests.Controllers
         public async Task Login_POST_WithEmptyUsername_ReturnsViewWithError()
         {
             // Arrange
-            var model = new LoginViewModel
+            LoginViewModel model = new()
             {
                 Username = "",
                 Password = "password"
@@ -82,7 +81,7 @@ namespace ui.tests.Controllers
             _controller.ModelState.AddModelError("Username", "Username is required");
 
             // Act
-            var result = await _controller.Login(model, null) as ViewResult;
+            ViewResult result = await _controller.Login(model, null) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -93,7 +92,7 @@ namespace ui.tests.Controllers
         public async Task Login_POST_WithEmptyPassword_ReturnsViewWithError()
         {
             // Arrange
-            var model = new LoginViewModel
+            LoginViewModel model = new()
             {
                 Username = "admin",
                 Password = ""
@@ -101,7 +100,7 @@ namespace ui.tests.Controllers
             _controller.ModelState.AddModelError("Password", "Password is required");
 
             // Act
-            var result = await _controller.Login(model, null) as ViewResult;
+            ViewResult result = await _controller.Login(model, null) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

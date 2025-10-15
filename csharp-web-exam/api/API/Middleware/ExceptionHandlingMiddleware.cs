@@ -4,15 +4,10 @@ using System.Text.Json;
 
 namespace api.API.Middleware;
 
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(ExceptionHandlingMiddleware));
-    private readonly RequestDelegate _next;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next)
-    {
-        _next = next ?? throw new ArgumentNullException(nameof(next));
-    }
+    private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -29,7 +24,7 @@ public class ExceptionHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var statusCode = exception switch
+        HttpStatusCode statusCode = exception switch
         {
             ArgumentNullException => HttpStatusCode.BadRequest,
             ArgumentException => HttpStatusCode.BadRequest,
@@ -51,10 +46,11 @@ public class ExceptionHandlingMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
-        var json = JsonSerializer.Serialize(problemDetails, new JsonSerializerOptions
+        JsonSerializerOptions options = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        };
+        string json = JsonSerializer.Serialize(problemDetails, options);
 
         return context.Response.WriteAsync(json);
     }

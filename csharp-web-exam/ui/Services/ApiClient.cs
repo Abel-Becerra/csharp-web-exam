@@ -39,7 +39,7 @@ namespace csharp_web_exam.Services
         {
             try
             {
-                var token = HttpContext.Current?.Request.Cookies["AuthToken"]?.Value;
+                string token = HttpContext.Current?.Request.Cookies["AuthToken"]?.Value;
                 if (!string.IsNullOrEmpty(token))
                 {
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -60,15 +60,15 @@ namespace csharp_web_exam.Services
             {
                 _log.Info($"Attempting login for user: {username}");
                 var loginRequest = new { Username = username, Password = password };
-                var json = JsonConvert.SerializeObject(loginRequest);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                string json = JsonConvert.SerializeObject(loginRequest);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
                 
-                var response = await _httpClient.PostAsync("/api/auth/login", content);
+                HttpResponseMessage response = await _httpClient.PostAsync("/api/auth/login", content);
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    LoginResponse loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseContent);
                     _log.Info($"Login successful for user: {username}");
                     return loginResponse;
                 }
@@ -94,10 +94,10 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info("Fetching all categories from API");
-                var response = await _httpClient.GetAsync("/api/categories");
+                HttpResponseMessage response = await _httpClient.GetAsync("/api/categories");
                 response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                var categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                List<CategoryViewModel> categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(content);
                 _log.Info($"Successfully fetched {categories?.Count ?? 0} categories");
                 return categories ?? new List<CategoryViewModel>();
             }
@@ -113,10 +113,10 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Fetching category with ID {id} from API");
-                var response = await _httpClient.GetAsync($"/api/categories/{id}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"/api/categories/{id}");
                 response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                var category = JsonConvert.DeserializeObject<CategoryViewModel>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                CategoryViewModel category = JsonConvert.DeserializeObject<CategoryViewModel>(content);
                 _log.Info($"Successfully fetched category with ID {id}");
                 return category;
             }
@@ -132,12 +132,12 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Creating category: {category.Name}");
-                var json = JsonConvert.SerializeObject(new { Name = category.Name });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("/api/categories", content);
+                string json = JsonConvert.SerializeObject(new { Name = category.Name });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PostAsync("/api/categories", content);
                 response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var createdCategory = JsonConvert.DeserializeObject<CategoryViewModel>(responseContent);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                CategoryViewModel createdCategory = JsonConvert.DeserializeObject<CategoryViewModel>(responseContent);
                 _log.Info($"Successfully created category with ID {createdCategory?.Id}");
                 return createdCategory;
             }
@@ -153,9 +153,9 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Updating category with ID {id}");
-                var json = JsonConvert.SerializeObject(new { Name = category.Name });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PutAsync($"/api/categories/{id}", content);
+                string json = JsonConvert.SerializeObject(new { Name = category.Name });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PutAsync($"/api/categories/{id}", content);
                 response.EnsureSuccessStatusCode();
                 _log.Info($"Successfully updated category with ID {id}");
                 return true;
@@ -172,7 +172,7 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Deleting category with ID {id}");
-                var response = await _httpClient.DeleteAsync($"/api/categories/{id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/categories/{id}");
                 response.EnsureSuccessStatusCode();
                 _log.Info($"Successfully deleted category with ID {id}");
                 return true;
@@ -193,7 +193,7 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Fetching products - Page: {page}, PageSize: {pageSize}");
-                var queryParams = new List<string>
+                List<string> queryParams = new List<string>
                 {
                     $"page={page}",
                     $"pageSize={pageSize}"
@@ -211,11 +211,11 @@ namespace csharp_web_exam.Services
                 if (sortDesc)
                     queryParams.Add("sortDesc=true");
 
-                var queryString = string.Join("&", queryParams);
-                var response = await _httpClient.GetAsync($"/api/products?{queryString}");
+                string queryString = string.Join("&", queryParams);
+                HttpResponseMessage response = await _httpClient.GetAsync($"/api/products?{queryString}");
                 response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<ProductListResult>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                ProductListResult result = JsonConvert.DeserializeObject<ProductListResult>(content);
                 _log.Info($"Successfully fetched {result?.Items?.Count ?? 0} products");
                 return result ?? new ProductListResult();
             }
@@ -231,10 +231,10 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Fetching product with ID {id} from API");
-                var response = await _httpClient.GetAsync($"/api/products/{id}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"/api/products/{id}");
                 response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                var product = JsonConvert.DeserializeObject<ProductViewModel>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                ProductViewModel product = JsonConvert.DeserializeObject<ProductViewModel>(content);
                 _log.Info($"Successfully fetched product with ID {id}");
                 return product;
             }
@@ -250,17 +250,17 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Creating product: {product.Name}");
-                var json = JsonConvert.SerializeObject(new
+                string json = JsonConvert.SerializeObject(new
                 {
-                    Name = product.Name,
-                    Price = product.Price,
-                    CategoryId = product.CategoryId
+                    product.Name,
+                    product.Price,
+                    product.CategoryId
                 });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("/api/products", content);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PostAsync("/api/products", content);
                 response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var createdProduct = JsonConvert.DeserializeObject<ProductViewModel>(responseContent);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                ProductViewModel createdProduct = JsonConvert.DeserializeObject<ProductViewModel>(responseContent);
                 _log.Info($"Successfully created product with ID {createdProduct?.Id}");
                 return createdProduct;
             }
@@ -276,14 +276,14 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Updating product with ID {id}");
-                var json = JsonConvert.SerializeObject(new
+                string json = JsonConvert.SerializeObject(new
                 {
-                    Name = product.Name,
-                    Price = product.Price,
-                    CategoryId = product.CategoryId
+                    product.Name,
+                    product.Price,
+                    product.CategoryId
                 });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PutAsync($"/api/products/{id}", content);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PutAsync($"/api/products/{id}", content);
                 response.EnsureSuccessStatusCode();
                 _log.Info($"Successfully updated product with ID {id}");
                 return true;
@@ -300,7 +300,7 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info($"Deleting product with ID {id}");
-                var response = await _httpClient.DeleteAsync($"/api/products/{id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/products/{id}");
                 response.EnsureSuccessStatusCode();
                 _log.Info($"Successfully deleted product with ID {id}");
                 return true;
@@ -317,10 +317,10 @@ namespace csharp_web_exam.Services
             try
             {
                 _log.Info("Fetching products grouped by category from API");
-                var response = await _httpClient.GetAsync("/api/products/grouped");
+                HttpResponseMessage response = await _httpClient.GetAsync("/api/products/grouped");
                 response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                var groups = JsonConvert.DeserializeObject<List<ProductGroupViewModel>>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                List<ProductGroupViewModel> groups = JsonConvert.DeserializeObject<List<ProductGroupViewModel>>(content);
                 _log.Info($"Successfully fetched {groups?.Count ?? 0} product groups");
                 return groups ?? new List<ProductGroupViewModel>();
             }

@@ -1,5 +1,6 @@
 using Dapper;
 using log4net;
+using System.Data;
 
 namespace api.Infrastructure.Data;
 
@@ -17,7 +18,7 @@ public class DbInitializer(IDbConnectionFactory connectionFactory)
             // Ensure database directory exists
             EnsureDatabaseDirectoryExists();
 
-            using var connection = _connectionFactory.CreateConnection();
+            using IDbConnection connection = _connectionFactory.CreateConnection();
             connection.Open();
 
             // Create Users table
@@ -76,7 +77,7 @@ public class DbInitializer(IDbConnectionFactory connectionFactory)
 
     private static async Task SeedDataAsync(System.Data.IDbConnection connection)
     {
-        var categoryCount = await connection.ExecuteScalarAsync<int>(
+        int categoryCount = await connection.ExecuteScalarAsync<int>(
             "SELECT COUNT(1) FROM Categories");
 
         if (categoryCount > 0)
@@ -87,10 +88,10 @@ public class DbInitializer(IDbConnectionFactory connectionFactory)
 
         _log.Info("Seeding database with initial data...");
 
-        var now = DateTime.UtcNow.ToString("o");
+        string now = DateTime.UtcNow.ToString("o");
 
         // Seed Users (password is "SampleEx4mF0rT3st!ñ" for all)
-        var passwordHash = Convert.ToBase64String(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes("SampleEx4mF0rT3st!ñ")));
+        string passwordHash = Convert.ToBase64String(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes("SampleEx4mF0rT3st!ñ")));
         
         await connection.ExecuteAsync(@"
             INSERT INTO Users (Username, PasswordHash, Email, Role, CreatedAt) VALUES 
@@ -133,7 +134,7 @@ public class DbInitializer(IDbConnectionFactory connectionFactory)
     private static void EnsureDatabaseDirectoryExists()
     {
         // Get the connection string to extract the database path
-        var appDataPath = Path.Combine(Directory.GetCurrentDirectory(), "app_data");
+        string appDataPath = Path.Combine(Directory.GetCurrentDirectory(), "app_data");
         
         if (!Directory.Exists(appDataPath))
         {

@@ -22,15 +22,15 @@ public class CategoryServiceTests
     public async Task GetAllCategoriesAsync_ReturnsAllCategories()
     {
         // Arrange
-        var categories = new List<Category>
-        {
-            new Category { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow },
-            new Category { Id = 2, Name = "Books", CreatedAt = DateTime.UtcNow }
-        };
+        List<Category> categories =
+        [
+            new() { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow },
+            new() { Id = 2, Name = "Books", CreatedAt = DateTime.UtcNow }
+        ];
         _mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(categories);
 
         // Act
-        var result = await _service.GetAllCategoriesAsync();
+        IEnumerable<CategoryDto> result = await _service.GetAllCategoriesAsync();
 
         // Assert
         Assert.NotNull(result);
@@ -42,11 +42,11 @@ public class CategoryServiceTests
     public async Task GetCategoryByIdAsync_ExistingId_ReturnsCategory()
     {
         // Arrange
-        var category = new Category { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow };
+        Category category = new() { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow };
         _mockRepository.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(category);
 
         // Act
-        var result = await _service.GetCategoryByIdAsync(1);
+        CategoryDto? result = await _service.GetCategoryByIdAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -61,7 +61,7 @@ public class CategoryServiceTests
         _mockRepository.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Category?)null);
 
         // Act
-        var result = await _service.GetCategoryByIdAsync(999);
+        CategoryDto? result = await _service.GetCategoryByIdAsync(999);
 
         // Assert
         Assert.Null(result);
@@ -71,11 +71,11 @@ public class CategoryServiceTests
     public async Task CreateCategoryAsync_ValidData_ReturnsCreatedCategory()
     {
         // Arrange
-        var createDto = new CreateCategoryDto { Name = "New Category" };
+        CreateCategoryDto createDto = new() { Name = "New Category" };
         _mockRepository.Setup(r => r.CreateAsync(It.IsAny<Category>())).ReturnsAsync(1);
 
         // Act
-        var result = await _service.CreateCategoryAsync(createDto);
+        CategoryDto? result = await _service.CreateCategoryAsync(createDto);
 
         // Assert
         Assert.NotNull(result);
@@ -88,14 +88,14 @@ public class CategoryServiceTests
     public async Task UpdateCategoryAsync_ExistingCategory_ReturnsTrue()
     {
         // Arrange
-        var existingCategory = new Category { Id = 1, Name = "Old Name", CreatedAt = DateTime.UtcNow };
-        var updateDto = new UpdateCategoryDto { Name = "Updated Name" };
+        Category existingCategory = new() { Id = 1, Name = "Old Name", CreatedAt = DateTime.UtcNow };
+        UpdateCategoryDto updateDto = new() { Name = "Updated Name" };
         
         _mockRepository.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(existingCategory);
         _mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Category>())).ReturnsAsync(true);
 
         // Act
-        var result = await _service.UpdateCategoryAsync(1, updateDto);
+        bool result = await _service.UpdateCategoryAsync(1, updateDto);
 
         // Assert
         Assert.True(result);
@@ -106,11 +106,11 @@ public class CategoryServiceTests
     public async Task UpdateCategoryAsync_NonExistingCategory_ReturnsFalse()
     {
         // Arrange
-        var updateDto = new UpdateCategoryDto { Name = "Updated Name" };
+        UpdateCategoryDto updateDto = new() { Name = "Updated Name" };
         _mockRepository.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Category?)null);
 
         // Act
-        var result = await _service.UpdateCategoryAsync(999, updateDto);
+        bool result = await _service.UpdateCategoryAsync(999, updateDto);
 
         // Assert
         Assert.False(result);
@@ -125,7 +125,7 @@ public class CategoryServiceTests
         _mockRepository.Setup(r => r.DeleteAsync(1)).ReturnsAsync(true);
 
         // Act
-        var result = await _service.DeleteCategoryAsync(1);
+        bool result = await _service.DeleteCategoryAsync(1);
 
         // Assert
         Assert.True(result);
@@ -139,7 +139,7 @@ public class CategoryServiceTests
         _mockRepository.Setup(r => r.ExistsAsync(999)).ReturnsAsync(false);
 
         // Act
-        var result = await _service.DeleteCategoryAsync(999);
+        bool result = await _service.DeleteCategoryAsync(999);
 
         // Assert
         Assert.False(result);

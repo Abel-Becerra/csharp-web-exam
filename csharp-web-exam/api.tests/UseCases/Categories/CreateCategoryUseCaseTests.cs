@@ -21,12 +21,12 @@ public class CreateCategoryUseCaseTests
     public async Task ExecuteAsync_ValidDto_ReturnsCreatedCategory()
     {
         // Arrange
-        var createDto = new CreateCategoryDto { Name = "Sports" };
-        var createdDto = new CategoryDto { Id = 1, Name = "Sports" };
+        CreateCategoryDto createDto = new() { Name = "Sports" };
+        CategoryDto createdDto = new() { Id = 1, Name = "Sports" };
         _mockService.Setup(s => s.CreateCategoryAsync(createDto)).ReturnsAsync(createdDto);
 
         // Act
-        var result = await _useCase.ExecuteAsync(createDto);
+        CategoryDto result = await _useCase.ExecuteAsync(createDto);
 
         // Assert
         Assert.NotNull(result);

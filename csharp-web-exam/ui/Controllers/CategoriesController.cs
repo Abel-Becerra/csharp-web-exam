@@ -1,10 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using csharp_web_exam.Filters;
 using csharp_web_exam.Models;
 using csharp_web_exam.Services;
 using log4net;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace csharp_web_exam.Controllers
 {
@@ -29,7 +30,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info("Loading categories index");
-                var categories = await _apiClient.GetCategoriesAsync();
+                List<CategoryViewModel> categories = await _apiClient.GetCategoriesAsync();
                 return View(categories);
             }
             catch (Exception ex)
@@ -46,7 +47,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading category details for ID: {id}");
-                var category = await _apiClient.GetCategoryByIdAsync(id);
+                CategoryViewModel category = await _apiClient.GetCategoryByIdAsync(id);
                 return View(category);
             }
             catch (Exception ex)
@@ -94,7 +95,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading edit form for category ID: {id}");
-                var category = await _apiClient.GetCategoryByIdAsync(id);
+                CategoryViewModel category = await _apiClient.GetCategoryByIdAsync(id);
                 return View(category);
             }
             catch (Exception ex)
@@ -136,7 +137,7 @@ namespace csharp_web_exam.Controllers
             try
             {
                 _log.Info($"Loading delete confirmation for category ID: {id}");
-                var category = await _apiClient.GetCategoryByIdAsync(id);
+                CategoryViewModel category = await _apiClient.GetCategoryByIdAsync(id);
                 return View(category);
             }
             catch (Exception ex)

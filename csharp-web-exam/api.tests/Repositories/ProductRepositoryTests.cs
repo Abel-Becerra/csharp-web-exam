@@ -20,7 +20,7 @@ public class ProductRepositoryTests : IDisposable
         _connection.Open();
 
         // Create schema
-        var createTablesCmd = _connection.CreateCommand();
+        SqliteCommand createTablesCmd = _connection.CreateCommand();
         createTablesCmd.CommandText = @"
             CREATE TABLE Categories (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,13 +41,13 @@ public class ProductRepositoryTests : IDisposable
         createTablesCmd.ExecuteNonQuery();
 
         // Insert test category
-        var insertCategoryCmd = _connection.CreateCommand();
+        SqliteCommand insertCategoryCmd = _connection.CreateCommand();
         insertCategoryCmd.CommandText = "INSERT INTO Categories (Name, CreatedAt) VALUES ('Electronics', @createdAt); SELECT last_insert_rowid();";
         insertCategoryCmd.Parameters.AddWithValue("@createdAt", DateTime.UtcNow.ToString("o"));
         _categoryId = Convert.ToInt32(insertCategoryCmd.ExecuteScalar());
 
         // Create repository
-        var factory = new TestDbConnectionFactory(_connection);
+        TestDbConnectionFactory factory = new(_connection);
         _repository = new ProductRepository(factory);
     }
 
@@ -59,12 +59,11 @@ public class ProductRepositoryTests : IDisposable
         await InsertTestProduct("Mouse", 29.99m);
 
         // Act
-        var result = await _repository.GetPagedAsync(1, 10, null, null, null);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(1, 10, null, null, null);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(2, result.TotalCount);
-        Assert.Equal(2, result.Items.Count());
+        Assert.Equal(2, TotalCount);
+        Assert.Equal(2, Items.Count());
     }
 
     [Fact]
@@ -77,11 +76,11 @@ public class ProductRepositoryTests : IDisposable
         }
 
         // Act
-        var result = await _repository.GetPagedAsync(2, 5, null, null, null);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(2, 5, null, null, null);
 
         // Assert
-        Assert.Equal(15, result.TotalCount);
-        Assert.Equal(5, result.Items.Count());
+        Assert.Equal(15, TotalCount);
+        Assert.Equal(5, Items.Count());
     }
 
     [Fact]
@@ -93,11 +92,11 @@ public class ProductRepositoryTests : IDisposable
         await InsertTestProduct("Mouse", 29.99m);
 
         // Act
-        var result = await _repository.GetPagedAsync(1, 10, "Laptop", null, null);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(1, 10, "Laptop", null, null);
 
         // Assert
-        Assert.Equal(2, result.TotalCount);
-        Assert.All(result.Items, p => Assert.Contains("Laptop", p.Name));
+        Assert.Equal(2, TotalCount);
+        Assert.All(Items, p => Assert.Contains("Laptop", p.Name));
     }
 
     [Fact]
@@ -108,11 +107,11 @@ public class ProductRepositoryTests : IDisposable
         await InsertTestProduct("Product 2", 200m);
 
         // Act
-        var result = await _repository.GetPagedAsync(1, 10, null, _categoryId, null);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(1, 10, null, _categoryId, null);
 
         // Assert
-        Assert.Equal(2, result.TotalCount);
-        Assert.All(result.Items, p => Assert.Equal(_categoryId, p.CategoryId));
+        Assert.Equal(2, TotalCount);
+        Assert.All(Items, p => Assert.Equal(_categoryId, p.CategoryId));
     }
 
     [Fact]
@@ -124,10 +123,10 @@ public class ProductRepositoryTests : IDisposable
         await InsertTestProduct("Mango", 150m);
 
         // Act
-        var result = await _repository.GetPagedAsync(1, 10, null, null, "name", false);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(1, 10, null, null, "name", false);
 
         // Assert
-        var names = result.Items.Select(p => p.Name).ToList();
+        List<string> names = [.. Items.Select(p => p.Name)];
         Assert.Equal("Apple", names[0]);
         Assert.Equal("Mango", names[1]);
         Assert.Equal("Zebra", names[2]);
@@ -142,10 +141,10 @@ public class ProductRepositoryTests : IDisposable
         await InsertTestProduct("Product 3", 200m);
 
         // Act
-        var result = await _repository.GetPagedAsync(1, 10, null, null, "price", true);
+        var (Items, TotalCount) = await _repository.GetPagedAsync(1, 10, null, null, "price", true);
 
         // Assert
-        var prices = result.Items.Select(p => p.Price).ToList();
+        List<decimal> prices = [.. Items.Select(p => p.Price)];
         Assert.Equal(300m, prices[0]);
         Assert.Equal(200m, prices[1]);
         Assert.Equal(100m, prices[2]);
@@ -155,10 +154,10 @@ public class ProductRepositoryTests : IDisposable
     public async Task GetByIdAsync_ExistingId_ReturnsProduct()
     {
         // Arrange
-        var id = await InsertTestProduct("Laptop", 999.99m);
+        int id = await InsertTestProduct("Laptop", 999.99m);
 
         // Act
-        var result = await _repository.GetByIdAsync(id);
+        Product? result = await _repository.GetByIdAsync(id);
 
         // Assert
         Assert.NotNull(result);
@@ -171,7 +170,7 @@ public class ProductRepositoryTests : IDisposable
     public async Task GetByIdAsync_NonExistingId_ReturnsNull()
     {
         // Act
-        var result = await _repository.GetByIdAsync(999);
+        Product? result = await _repository.GetByIdAsync(999);
 
         // Assert
         Assert.Null(result);
@@ -181,7 +180,7 @@ public class ProductRepositoryTests : IDisposable
     public async Task CreateAsync_ValidProduct_ReturnsId()
     {
         // Arrange
-        var product = new Product
+        Product product = new()
         {
             Name = "New Product",
             Price = 499.99m,
@@ -190,11 +189,11 @@ public class ProductRepositoryTests : IDisposable
         };
 
         // Act
-        var id = await _repository.CreateAsync(product);
+        int id = await _repository.CreateAsync(product);
 
         // Assert
         Assert.True(id > 0);
-        var created = await _repository.GetByIdAsync(id);
+        Product? created = await _repository.GetByIdAsync(id);
         Assert.NotNull(created);
         Assert.Equal("New Product", created.Name);
         Assert.Equal(499.99m, created.Price);
@@ -204,8 +203,8 @@ public class ProductRepositoryTests : IDisposable
     public async Task UpdateAsync_ExistingProduct_ReturnsTrue()
     {
         // Arrange
-        var id = await InsertTestProduct("Original", 100m);
-        var product = await _repository.GetByIdAsync(id);
+        int id = await InsertTestProduct("Original", 100m);
+        Product? product = await _repository.GetByIdAsync(id);
         product!.Name = "Updated";
         product.Price = 200m;
         product.UpdatedAt = DateTime.UtcNow;
@@ -215,7 +214,7 @@ public class ProductRepositoryTests : IDisposable
 
         // Assert
         Assert.True(result);
-        var updated = await _repository.GetByIdAsync(id);
+        Product? updated = await _repository.GetByIdAsync(id);
         Assert.Equal("Updated", updated!.Name);
         Assert.Equal(200m, updated.Price);
     }
@@ -224,7 +223,7 @@ public class ProductRepositoryTests : IDisposable
     public async Task UpdateAsync_NonExistingProduct_ReturnsFalse()
     {
         // Arrange
-        var product = new Product
+        Product? product = new()
         {
             Id = 999,
             Name = "NonExisting",
@@ -234,7 +233,7 @@ public class ProductRepositoryTests : IDisposable
         };
 
         // Act
-        var result = await _repository.UpdateAsync(product);
+        bool result = await _repository.UpdateAsync(product);
 
         // Assert
         Assert.False(result);
@@ -244,14 +243,14 @@ public class ProductRepositoryTests : IDisposable
     public async Task DeleteAsync_ExistingProduct_ReturnsTrue()
     {
         // Arrange
-        var id = await InsertTestProduct("ToDelete", 100m);
+        int id = await InsertTestProduct("ToDelete", 100m);
 
         // Act
-        var result = await _repository.DeleteAsync(id);
+        bool result = await _repository.DeleteAsync(id);
 
         // Assert
         Assert.True(result);
-        var deleted = await _repository.GetByIdAsync(id);
+        Product? deleted = await _repository.GetByIdAsync(id);
         Assert.Null(deleted);
     }
 
@@ -259,7 +258,7 @@ public class ProductRepositoryTests : IDisposable
     public async Task DeleteAsync_NonExistingProduct_ReturnsFalse()
     {
         // Act
-        var result = await _repository.DeleteAsync(999);
+        bool result = await _repository.DeleteAsync(999);
 
         // Assert
         Assert.False(result);
@@ -279,16 +278,16 @@ public class ProductRepositoryTests : IDisposable
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
-        var group = result.First();
-        Assert.Equal("Electronics", group.CategoryName);
-        Assert.Equal(3, group.Count);
-        Assert.Equal(450m, group.TotalValue);
-        Assert.Equal(150m, group.AvgPrice);
+        var (CategoryId, CategoryName, Count, TotalValue, AvgPrice, MinPrice, MaxPrice) = result.First();
+        Assert.Equal("Electronics", CategoryName);
+        Assert.Equal(3, Count);
+        Assert.Equal(450m, TotalValue);
+        Assert.Equal(150m, AvgPrice);
     }
 
     private async Task<int> InsertTestProduct(string name, decimal price)
     {
-        var cmd = _connection.CreateCommand();
+        SqliteCommand cmd = _connection.CreateCommand();
         cmd.CommandText = @"
             INSERT INTO Products (Name, Price, CategoryId, CreatedAt) 
             VALUES (@name, @price, @categoryId, @createdAt); 
@@ -297,7 +296,7 @@ public class ProductRepositoryTests : IDisposable
         cmd.Parameters.AddWithValue("@price", price);
         cmd.Parameters.AddWithValue("@categoryId", _categoryId);
         cmd.Parameters.AddWithValue("@createdAt", DateTime.UtcNow.ToString("o"));
-        var id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+        int id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
         return id;
     }
 

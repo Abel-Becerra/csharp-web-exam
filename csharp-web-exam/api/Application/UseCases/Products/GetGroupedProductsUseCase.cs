@@ -4,15 +4,10 @@ using log4net;
 
 namespace api.Application.UseCases.Products;
 
-public class GetGroupedProductsUseCase
+public class GetGroupedProductsUseCase(IProductService productService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(GetGroupedProductsUseCase));
-    private readonly IProductService _productService;
-
-    public GetGroupedProductsUseCase(IProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
+    private readonly IProductService _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
     public async Task<IEnumerable<ProductGroupDto>> ExecuteAsync()
     {
@@ -20,7 +15,7 @@ public class GetGroupedProductsUseCase
         
         try
         {
-            var groupedProducts = await _productService.GetProductsGroupedByCategoryAsync();
+            IEnumerable<ProductGroupDto> groupedProducts = await _productService.GetProductsGroupedByCategoryAsync();
             _log.Info($"Retrieved {groupedProducts.Count()} product groups");
             return groupedProducts;
         }

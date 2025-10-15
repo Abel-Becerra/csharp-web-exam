@@ -5,17 +5,11 @@ using log4net;
 
 namespace api.Application.Services;
 
-public class ProductService : IProductService
+public class ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository) : IProductService
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(ProductService));
-    private readonly IProductRepository _productRepository;
-    private readonly ICategoryRepository _categoryRepository;
-
-    public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
-    {
-        _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
-    }
+    private readonly IProductRepository _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+    private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
 
     public async Task<PaginatedResultDto<ProductDto>> GetProductsAsync(
         int page = 1, 
@@ -32,7 +26,7 @@ public class ProductService : IProductService
             var (items, totalCount) = await _productRepository.GetPagedAsync(
                 page, pageSize, searchTerm, categoryId, sortBy, sortDescending);
 
-            var productDtos = items.Select(MapToDto).ToList();
+            List<ProductDto> productDtos = items.Select(MapToDto).ToList();
             
             _log.Info($"Retrieved {productDtos.Count} products out of {totalCount} total");
             
@@ -57,7 +51,7 @@ public class ProductService : IProductService
         
         try
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            Product? product = await _productRepository.GetByIdAsync(id);
             
             if (product == null)
             {
@@ -82,14 +76,14 @@ public class ProductService : IProductService
         try
         {
             // Validate category exists
-            var categoryExists = await _categoryRepository.ExistsAsync(createDto.CategoryId);
+            bool categoryExists = await _categoryRepository.ExistsAsync(createDto.CategoryId);
             if (!categoryExists)
             {
                 _log.Warn($"Category with ID {createDto.CategoryId} does not exist");
                 throw new InvalidOperationException($"Category with ID {createDto.CategoryId} does not exist");
             }
 
-            var product = new Product
+            Product product = new()
             {
                 Name = createDto.Name,
                 Price = createDto.Price,
@@ -97,11 +91,11 @@ public class ProductService : IProductService
                 CreatedAt = DateTime.UtcNow
             };
 
-            var id = await _productRepository.CreateAsync(product);
+            int id = await _productRepository.CreateAsync(product);
             product.Id = id;
             
             // Fetch category name for response
-            var category = await _categoryRepository.GetByIdAsync(createDto.CategoryId);
+            Category? category = await _categoryRepository.GetByIdAsync(createDto.CategoryId);
             if (category != null)
             {
                 product.Category = category;
@@ -123,7 +117,7 @@ public class ProductService : IProductService
         
         try
         {
-            var existingProduct = await _productRepository.GetByIdAsync(id);
+            Product? existingProduct = await _productRepository.GetByIdAsync(id);
             
             if (existingProduct == null)
             {
@@ -132,7 +126,7 @@ public class ProductService : IProductService
             }
 
             // Validate category exists
-            var categoryExists = await _categoryRepository.ExistsAsync(updateDto.CategoryId);
+            bool categoryExists = await _categoryRepository.ExistsAsync(updateDto.CategoryId);
             if (!categoryExists)
             {
                 _log.Warn($"Category with ID {updateDto.CategoryId} does not exist");
@@ -144,7 +138,7 @@ public class ProductService : IProductService
             existingProduct.CategoryId = updateDto.CategoryId;
             existingProduct.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _productRepository.UpdateAsync(existingProduct);
+            bool result = await _productRepository.UpdateAsync(existingProduct);
             
             if (result)
             {
@@ -170,7 +164,7 @@ public class ProductService : IProductService
         
         try
         {
-            var exists = await _productRepository.ExistsAsync(id);
+            bool exists = await _productRepository.ExistsAsync(id);
             
             if (!exists)
             {
@@ -178,7 +172,7 @@ public class ProductService : IProductService
                 return false;
             }
 
-            var result = await _productRepository.DeleteAsync(id);
+            bool result = await _productRepository.DeleteAsync(id);
             
             if (result)
             {

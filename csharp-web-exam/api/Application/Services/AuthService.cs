@@ -7,28 +7,21 @@ using System.Text;
 
 namespace api.Application.Services;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IUserRepository userRepository,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IConfiguration configuration) : IAuthService
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(AuthService));
-    private readonly IUserRepository _userRepository;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IConfiguration _configuration;
-
-    public AuthService(
-        IUserRepository userRepository,
-        IJwtTokenGenerator jwtTokenGenerator,
-        IConfiguration configuration)
-    {
-        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        _jwtTokenGenerator = jwtTokenGenerator ?? throw new ArgumentNullException(nameof(jwtTokenGenerator));
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-    }
+    private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator ?? throw new ArgumentNullException(nameof(jwtTokenGenerator));
+    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
     public async Task<LoginResponse?> LoginAsync(LoginRequest request)
     {
         _log.Info($"Login attempt for user: {request.Username}");
 
-        var user = await _userRepository.GetByUsernameAsync(request.Username);
+        User? user = await _userRepository.GetByUsernameAsync(request.Username);
         
         if (user == null)
         {
@@ -42,8 +35,8 @@ public class AuthService : IAuthService
             return null;
         }
 
-        var token = _jwtTokenGenerator.GenerateToken(user);
-        var expirationMinutes = int.Parse(_configuration.GetSection("JwtSettings")["ExpirationMinutes"] ?? "60");
+        string token = _jwtTokenGenerator.GenerateToken(user);
+        int expirationMinutes = int.Parse(_configuration.GetSection("JwtSettings")["ExpirationMinutes"] ?? "60");
 
         _log.Info($"User logged in successfully: {request.Username}");
 
@@ -67,7 +60,7 @@ public class AuthService : IAuthService
             throw new InvalidOperationException("Username already exists");
         }
 
-        var user = new User
+        User user = new()
         {
             Username = request.Username,
             Email = request.Email,
@@ -78,8 +71,8 @@ public class AuthService : IAuthService
 
         user = await _userRepository.CreateAsync(user);
 
-        var token = _jwtTokenGenerator.GenerateToken(user);
-        var expirationMinutes = int.Parse(_configuration.GetSection("JwtSettings")["ExpirationMinutes"] ?? "60");
+        string token = _jwtTokenGenerator.GenerateToken(user);
+        int expirationMinutes = int.Parse(_configuration.GetSection("JwtSettings")["ExpirationMinutes"] ?? "60");
 
         _log.Info($"User registered successfully: {request.Username}");
 
@@ -100,14 +93,9 @@ public class AuthService : IAuthService
 
     private static string HashPassword(string password)
     {
-        using var sha256 = SHA256.Create();
-        var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        byte[] hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
         return Convert.ToBase64String(hashedBytes);
     }
 
-    private static bool VerifyPassword(string password, string passwordHash)
-    {
-        var hashedInput = HashPassword(password);
-        return hashedInput == passwordHash;
-    }
+    private static bool VerifyPassword(string password, string passwordHash) => HashPassword(password) == passwordHash;
 }

@@ -24,16 +24,16 @@ public class ProductServiceTests
     public async Task GetProductsAsync_ReturnsPagedResults()
     {
         // Arrange
-        var products = new List<Product>
-        {
-            new Product { Id = 1, Name = "Product 1", Price = 10.99m, CategoryId = 1, CreatedAt = DateTime.UtcNow },
-            new Product { Id = 2, Name = "Product 2", Price = 20.99m, CategoryId = 1, CreatedAt = DateTime.UtcNow }
-        };
+        List<Product> products =
+        [
+            new() { Id = 1, Name = "Product 1", Price = 10.99m, CategoryId = 1, CreatedAt = DateTime.UtcNow },
+            new() { Id = 2, Name = "Product 2", Price = 20.99m, CategoryId = 1, CreatedAt = DateTime.UtcNow }
+        ];
         _mockProductRepository.Setup(r => r.GetPagedAsync(1, 10, null, null, null, false))
             .ReturnsAsync((products, 2));
 
         // Act
-        var result = await _service.GetProductsAsync(1, 10);
+        PaginatedResultDto<ProductDto> result = await _service.GetProductsAsync(1, 10);
 
         // Assert
         Assert.NotNull(result);
@@ -46,7 +46,7 @@ public class ProductServiceTests
     public async Task GetProductByIdAsync_ExistingId_ReturnsProduct()
     {
         // Arrange
-        var product = new Product 
+        Product product = new() 
         { 
             Id = 1, 
             Name = "Test Product", 
@@ -58,7 +58,7 @@ public class ProductServiceTests
         _mockProductRepository.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(product);
 
         // Act
-        var result = await _service.GetProductByIdAsync(1);
+        ProductDto? result = await _service.GetProductByIdAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -71,15 +71,15 @@ public class ProductServiceTests
     public async Task CreateProductAsync_ValidData_ReturnsCreatedProduct()
     {
         // Arrange
-        var createDto = new CreateProductDto { Name = "New Product", Price = 49.99m, CategoryId = 1 };
-        var category = new Category { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow };
+        CreateProductDto createDto = new() { Name = "New Product", Price = 49.99m, CategoryId = 1 };
+        Category category = new() { Id = 1, Name = "Electronics", CreatedAt = DateTime.UtcNow };
         
         _mockCategoryRepository.Setup(r => r.ExistsAsync(1)).ReturnsAsync(true);
         _mockCategoryRepository.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(category);
         _mockProductRepository.Setup(r => r.CreateAsync(It.IsAny<Product>())).ReturnsAsync(1);
 
         // Act
-        var result = await _service.CreateProductAsync(createDto);
+        ProductDto result = await _service.CreateProductAsync(createDto);
 
         // Assert
         Assert.NotNull(result);
@@ -92,19 +92,18 @@ public class ProductServiceTests
     public async Task CreateProductAsync_InvalidCategoryId_ThrowsException()
     {
         // Arrange
-        var createDto = new CreateProductDto { Name = "New Product", Price = 49.99m, CategoryId = 999 };
+        CreateProductDto createDto = new() { Name = "New Product", Price = 49.99m, CategoryId = 999 };
         _mockCategoryRepository.Setup(r => r.ExistsAsync(999)).ReturnsAsync(false);
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => 
-            _service.CreateProductAsync(createDto));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _service.CreateProductAsync(createDto));
     }
 
     [Fact]
     public async Task UpdateProductAsync_ExistingProduct_ReturnsTrue()
     {
         // Arrange
-        var existingProduct = new Product 
+        Product existingProduct = new() 
         { 
             Id = 1, 
             Name = "Old Name", 
@@ -112,19 +111,18 @@ public class ProductServiceTests
             CategoryId = 1, 
             CreatedAt = DateTime.UtcNow 
         };
-        var updateDto = new UpdateProductDto { Name = "Updated Name", Price = 15.00m, CategoryId = 1 };
+        UpdateProductDto updateDto = new() { Name = "Updated Name", Price = 15.00m, CategoryId = 1 };
         
         _mockProductRepository.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(existingProduct);
         _mockCategoryRepository.Setup(r => r.ExistsAsync(1)).ReturnsAsync(true);
         _mockProductRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>())).ReturnsAsync(true);
 
         // Act
-        var result = await _service.UpdateProductAsync(1, updateDto);
+        bool result = await _service.UpdateProductAsync(1, updateDto);
 
         // Assert
         Assert.True(result);
-        _mockProductRepository.Verify(r => r.UpdateAsync(It.Is<Product>(p => 
-            p.Name == "Updated Name" && p.Price == 15.00m)), Times.Once);
+        _mockProductRepository.Verify(r => r.UpdateAsync(It.Is<Product>(p => p.Name == "Updated Name" && p.Price == 15.00m)), Times.Once);
     }
 
     [Fact]
@@ -135,7 +133,7 @@ public class ProductServiceTests
         _mockProductRepository.Setup(r => r.DeleteAsync(1)).ReturnsAsync(true);
 
         // Act
-        var result = await _service.DeleteProductAsync(1);
+        bool result = await _service.DeleteProductAsync(1);
 
         // Assert
         Assert.True(result);
@@ -154,12 +152,12 @@ public class ProductServiceTests
         _mockProductRepository.Setup(r => r.GetGroupedByCategoryAsync()).ReturnsAsync(groupedData);
 
         // Act
-        var result = await _service.GetProductsGroupedByCategoryAsync();
+        IEnumerable<ProductGroupDto> result = await _service.GetProductsGroupedByCategoryAsync();
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        var firstGroup = result.First();
+        ProductGroupDto firstGroup = result.First();
         Assert.Equal("Electronics", firstGroup.CategoryName);
         Assert.Equal(5, firstGroup.ProductCount);
     }

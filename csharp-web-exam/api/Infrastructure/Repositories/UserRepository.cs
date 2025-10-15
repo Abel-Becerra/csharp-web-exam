@@ -3,26 +3,22 @@ using api.Domain.Entities;
 using api.Infrastructure.Data;
 using Dapper;
 using log4net;
+using System.Data;
 
 namespace api.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(IDbConnectionFactory connectionFactory) : IUserRepository
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(UserRepository));
-    private readonly IDbConnectionFactory _connectionFactory;
-
-    public UserRepository(IDbConnectionFactory connectionFactory)
-    {
-        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-    }
+    private readonly IDbConnectionFactory _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 
     public async Task<User?> GetByUsernameAsync(string username)
     {
         _log.Info($"Getting user by username: {username}");
 
-        using var connection = _connectionFactory.CreateConnection();
+        using IDbConnection connection = _connectionFactory.CreateConnection();
         
-        var user = await connection.QueryFirstOrDefaultAsync<User>(
+        User? user = await connection.QueryFirstOrDefaultAsync<User>(
             "SELECT Id, Username, PasswordHash, Email, Role, CreatedAt FROM Users WHERE Username = @Username",
             new { Username = username });
 
@@ -33,9 +29,9 @@ public class UserRepository : IUserRepository
     {
         _log.Info($"Getting user by ID: {id}");
 
-        using var connection = _connectionFactory.CreateConnection();
+        using IDbConnection connection = _connectionFactory.CreateConnection();
         
-        var user = await connection.QueryFirstOrDefaultAsync<User>(
+        User? user = await connection.QueryFirstOrDefaultAsync<User>(
             "SELECT Id, Username, PasswordHash, Email, Role, CreatedAt FROM Users WHERE Id = @Id",
             new { Id = id });
 
@@ -46,14 +42,14 @@ public class UserRepository : IUserRepository
     {
         _log.Info($"Creating user: {user.Username}");
 
-        using var connection = _connectionFactory.CreateConnection();
+        using IDbConnection connection = _connectionFactory.CreateConnection();
         
-        var sql = @"
+        string sql = @"
             INSERT INTO Users (Username, PasswordHash, Email, Role, CreatedAt)
             VALUES (@Username, @PasswordHash, @Email, @Role, @CreatedAt);
             SELECT last_insert_rowid();";
 
-        var id = await connection.ExecuteScalarAsync<int>(sql, user);
+        int id = await connection.ExecuteScalarAsync<int>(sql, user);
         user.Id = id;
 
         _log.Info($"User created with ID: {id}");
@@ -64,9 +60,9 @@ public class UserRepository : IUserRepository
     {
         _log.Info($"Checking if user exists: {username}");
 
-        using var connection = _connectionFactory.CreateConnection();
+        using IDbConnection connection = _connectionFactory.CreateConnection();
         
-        var count = await connection.ExecuteScalarAsync<int>(
+        int count = await connection.ExecuteScalarAsync<int>(
             "SELECT COUNT(1) FROM Users WHERE Username = @Username",
             new { Username = username });
 

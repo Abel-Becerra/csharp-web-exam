@@ -24,7 +24,7 @@ namespace csharp_web_exam
 
         protected void Application_Error()
         {
-            var exception = Server.GetLastError();
+            System.Exception exception = Server.GetLastError();
             log.Error("Unhandled exception occurred", exception);
         }
     }

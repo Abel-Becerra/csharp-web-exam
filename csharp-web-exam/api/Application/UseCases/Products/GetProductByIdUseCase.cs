@@ -4,15 +4,10 @@ using log4net;
 
 namespace api.Application.UseCases.Products;
 
-public class GetProductByIdUseCase
+public class GetProductByIdUseCase(IProductService productService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(GetProductByIdUseCase));
-    private readonly IProductService _productService;
-
-    public GetProductByIdUseCase(IProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
+    private readonly IProductService _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
     public async Task<ProductDto?> ExecuteAsync(int id)
     {
@@ -20,7 +15,7 @@ public class GetProductByIdUseCase
         
         try
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            ProductDto? product = await _productService.GetProductByIdAsync(id);
             
             if (product == null)
             {

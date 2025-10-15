@@ -5,15 +5,10 @@ using log4net;
 
 namespace api.Application.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(CategoryService));
-    private readonly ICategoryRepository _categoryRepository;
-
-    public CategoryService(ICategoryRepository categoryRepository)
-    {
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
-    }
+    private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
 
     public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
     {
@@ -21,8 +16,8 @@ public class CategoryService : ICategoryService
         
         try
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            var result = categories.Select(MapToDto).ToList();
+            IEnumerable<Category> categories = await _categoryRepository.GetAllAsync();
+            List<CategoryDto>? result = categories.Select(MapToDto).ToList();
             
             _log.Info($"Retrieved {result.Count} categories successfully");
             return result;
@@ -40,7 +35,7 @@ public class CategoryService : ICategoryService
         
         try
         {
-            var category = await _categoryRepository.GetByIdAsync(id);
+            Category? category = await _categoryRepository.GetByIdAsync(id);
             
             if (category == null)
             {
@@ -64,13 +59,13 @@ public class CategoryService : ICategoryService
         
         try
         {
-            var category = new Category
+            Category category = new()
             {
                 Name = createDto.Name,
                 CreatedAt = DateTime.UtcNow
             };
 
-            var id = await _categoryRepository.CreateAsync(category);
+            int id = await _categoryRepository.CreateAsync(category);
             category.Id = id;
             
             _log.Info($"Category created successfully with ID: {id}");
@@ -89,7 +84,7 @@ public class CategoryService : ICategoryService
         
         try
         {
-            var existingCategory = await _categoryRepository.GetByIdAsync(id);
+            Category? existingCategory = await _categoryRepository.GetByIdAsync(id);
             
             if (existingCategory == null)
             {
@@ -100,7 +95,7 @@ public class CategoryService : ICategoryService
             existingCategory.Name = updateDto.Name;
             existingCategory.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _categoryRepository.UpdateAsync(existingCategory);
+            bool result = await _categoryRepository.UpdateAsync(existingCategory);
             
             if (result)
             {
@@ -126,7 +121,7 @@ public class CategoryService : ICategoryService
         
         try
         {
-            var exists = await _categoryRepository.ExistsAsync(id);
+            bool exists = await _categoryRepository.ExistsAsync(id);
             
             if (!exists)
             {
@@ -134,7 +129,7 @@ public class CategoryService : ICategoryService
                 return false;
             }
 
-            var result = await _categoryRepository.DeleteAsync(id);
+            bool result = await _categoryRepository.DeleteAsync(id);
             
             if (result)
             {

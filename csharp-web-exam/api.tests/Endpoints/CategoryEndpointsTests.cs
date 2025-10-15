@@ -19,16 +19,16 @@ public class CategoryEndpointsTests
     public async Task GetAllCategories_ReturnsCategories()
     {
         // Arrange
-        var categories = new List<CategoryDto>
-        {
-            new CategoryDto { Id = 1, Name = "Electronics" },
-            new CategoryDto { Id = 2, Name = "Books" }
-        };
+        List<CategoryDto> categories =
+        [
+            new() { Id = 1, Name = "Electronics" },
+            new() { Id = 2, Name = "Books" }
+        ];
         _mockService.Setup(s => s.GetAllCategoriesAsync()).ReturnsAsync(categories);
-        var useCase = new GetAllCategoriesUseCase(_mockService.Object);
+        GetAllCategoriesUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync();
+        IEnumerable<CategoryDto> result = await useCase.ExecuteAsync();
 
         // Assert
         Assert.NotNull(result);
@@ -39,12 +39,12 @@ public class CategoryEndpointsTests
     public async Task GetCategoryById_ExistingId_ReturnsCategory()
     {
         // Arrange
-        var category = new CategoryDto { Id = 1, Name = "Electronics" };
+        CategoryDto category = new() { Id = 1, Name = "Electronics" };
         _mockService.Setup(s => s.GetCategoryByIdAsync(1)).ReturnsAsync(category);
-        var useCase = new GetCategoryByIdUseCase(_mockService.Object);
+        GetCategoryByIdUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1);
+        CategoryDto? result = await useCase.ExecuteAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -57,10 +57,10 @@ public class CategoryEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.GetCategoryByIdAsync(999)).ReturnsAsync((CategoryDto?)null);
-        var useCase = new GetCategoryByIdUseCase(_mockService.Object);
+        GetCategoryByIdUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999);
+        CategoryDto? result = await useCase.ExecuteAsync(999);
 
         // Assert
         Assert.Null(result);
@@ -70,13 +70,13 @@ public class CategoryEndpointsTests
     public async Task CreateCategory_ValidDto_ReturnsCreated()
     {
         // Arrange
-        var createDto = new CreateCategoryDto { Name = "Sports" };
-        var createdDto = new CategoryDto { Id = 1, Name = "Sports" };
+        CreateCategoryDto createDto = new() { Name = "Sports" };
+        CategoryDto createdDto = new() { Id = 1, Name = "Sports" };
         _mockService.Setup(s => s.CreateCategoryAsync(createDto)).ReturnsAsync(createdDto);
-        var useCase = new CreateCategoryUseCase(_mockService.Object);
+        CreateCategoryUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(createDto);
+        CategoryDto? result = await useCase.ExecuteAsync(createDto);
 
         // Assert
         Assert.NotNull(result);
@@ -88,12 +88,12 @@ public class CategoryEndpointsTests
     public async Task UpdateCategory_ValidDto_ReturnsTrue()
     {
         // Arrange
-        var updateDto = new UpdateCategoryDto { Name = "Updated" };
+        UpdateCategoryDto updateDto = new() { Name = "Updated" };
         _mockService.Setup(s => s.UpdateCategoryAsync(1, updateDto)).ReturnsAsync(true);
-        var useCase = new UpdateCategoryUseCase(_mockService.Object);
+        UpdateCategoryUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1, updateDto);
+        bool result = await useCase.ExecuteAsync(1, updateDto);
 
         // Assert
         Assert.True(result);
@@ -103,12 +103,12 @@ public class CategoryEndpointsTests
     public async Task UpdateCategory_NonExistingId_ReturnsFalse()
     {
         // Arrange
-        var updateDto = new UpdateCategoryDto { Name = "Updated" };
+        UpdateCategoryDto updateDto = new() { Name = "Updated" };
         _mockService.Setup(s => s.UpdateCategoryAsync(999, updateDto)).ReturnsAsync(false);
-        var useCase = new UpdateCategoryUseCase(_mockService.Object);
+        UpdateCategoryUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999, updateDto);
+        bool result = await useCase.ExecuteAsync(999, updateDto);
 
         // Assert
         Assert.False(result);
@@ -119,10 +119,10 @@ public class CategoryEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.DeleteCategoryAsync(1)).ReturnsAsync(true);
-        var useCase = new DeleteCategoryUseCase(_mockService.Object);
+        DeleteCategoryUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(1);
+        bool result = await useCase.ExecuteAsync(1);
 
         // Assert
         Assert.True(result);
@@ -133,10 +133,10 @@ public class CategoryEndpointsTests
     {
         // Arrange
         _mockService.Setup(s => s.DeleteCategoryAsync(999)).ReturnsAsync(false);
-        var useCase = new DeleteCategoryUseCase(_mockService.Object);
+        DeleteCategoryUseCase useCase = new(_mockService.Object);
 
         // Act
-        var result = await useCase.ExecuteAsync(999);
+        bool result = await useCase.ExecuteAsync(999);
 
         // Assert
         Assert.False(result);

@@ -4,26 +4,20 @@ using log4net;
 
 namespace api.Application.UseCases.Products;
 
-public class CreateProductUseCase
+public class CreateProductUseCase(IProductService productService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(CreateProductUseCase));
-    private readonly IProductService _productService;
-
-    public CreateProductUseCase(IProductService productService)
-    {
-        _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-    }
+    private readonly IProductService _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
     public async Task<ProductDto> ExecuteAsync(CreateProductDto dto)
     {
-        if (dto == null)
-            throw new ArgumentNullException(nameof(dto));
+        ArgumentNullException.ThrowIfNull(dto);
 
         _log.Info($"Executing CreateProductUseCase for product: {dto.Name}");
         
         try
         {
-            var product = await _productService.CreateProductAsync(dto);
+            ProductDto product = await _productService.CreateProductAsync(dto);
             _log.Info($"Product created successfully with ID: {product.Id}");
             return product;
         }

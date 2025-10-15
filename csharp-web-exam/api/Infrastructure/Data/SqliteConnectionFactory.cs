@@ -3,14 +3,9 @@ using System.Data;
 
 namespace api.Infrastructure.Data;
 
-public class SqliteConnectionFactory : IDbConnectionFactory
+public class SqliteConnectionFactory(string connectionString) : IDbConnectionFactory
 {
-    private readonly string _connectionString;
-
-    public SqliteConnectionFactory(string connectionString)
-    {
-        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-    }
+    private readonly string _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
 
     public IDbConnection CreateConnection()
     {

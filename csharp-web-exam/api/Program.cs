@@ -9,18 +9,19 @@ using api.Infrastructure.Repositories;
 using api.Infrastructure.Security;
 using log4net;
 using log4net.Config;
+using log4net.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Configure log4net
-var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly()!);
+ILoggerRepository logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly()!);
 XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
-var log = LogManager.GetLogger(typeof(Program));
+ILog log = LogManager.GetLogger(typeof(Program));
 log.Info("Application starting...");
 
 // Configure Swagger/OpenAPI
@@ -62,8 +63,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Configure JWT Authentication
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
+IConfigurationSection jwtSettings = builder.Configuration.GetSection("JwtSettings");
+string secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -88,10 +89,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // Get API Settings from configuration
-var apiSettings = builder.Configuration.GetSection("ApiSettings");
-var enableSwagger = apiSettings.GetValue<bool>("EnableSwagger", true);
-var enableCors = apiSettings.GetValue<bool>("EnableCors", true);
-var corsOrigins = apiSettings.GetValue<string>("CorsOrigins", "*");
+IConfigurationSection apiSettings = builder.Configuration.GetSection("ApiSettings");
+bool enableSwagger = apiSettings.GetValue<bool>("EnableSwagger", true);
+bool enableCors = apiSettings.GetValue<bool>("EnableCors", true);
+string corsOrigins = apiSettings.GetValue<string>("CorsOrigins", "*")!;
 
 // Configure CORS based on environment
 if (enableCors)
@@ -108,7 +109,7 @@ if (enableCors)
             }
             else
             {
-                var origins = corsOrigins!.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                string[] origins = corsOrigins!.Split(',', StringSplitOptions.RemoveEmptyEntries);
                 policy.WithOrigins(origins)
                       .AllowAnyMethod()
                       .AllowAnyHeader()
@@ -119,7 +120,7 @@ if (enableCors)
 }
 
 // Register Database Connection Factory
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
 
 builder.Services.AddSingleton<IDbConnectionFactory>(sp => 
@@ -156,14 +157,14 @@ builder.Services.AddScoped<DeleteProductUseCase>();
 // Register DbInitializer
 builder.Services.AddScoped<DbInitializer>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Initialize database
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
     try
     {
-        var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+        DbInitializer dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
         await dbInitializer.InitializeAsync();
         log.Info("Database initialized successfully");
     }

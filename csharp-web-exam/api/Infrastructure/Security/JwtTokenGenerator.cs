@@ -7,25 +7,20 @@ using System.Text;
 
 namespace api.Infrastructure.Security;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenGenerator(IConfiguration configuration) : IJwtTokenGenerator
 {
-    private readonly IConfiguration _configuration;
-
-    public JwtTokenGenerator(IConfiguration configuration)
-    {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-    }
+    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
     public string GenerateToken(User user)
     {
-        var jwtSettings = _configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
-        var issuer = jwtSettings["Issuer"] ?? "CSharpWebExamAPI";
-        var audience = jwtSettings["Audience"] ?? "CSharpWebExamClient";
-        var expirationMinutes = int.Parse(jwtSettings["ExpirationMinutes"] ?? "60");
+        IConfigurationSection jwtSettings = _configuration.GetSection("JwtSettings");
+        string secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
+        string issuer = jwtSettings["Issuer"] ?? "CSharpWebExamAPI";
+        string audience = jwtSettings["Audience"] ?? "CSharpWebExamClient";
+        int expirationMinutes = int.Parse(jwtSettings["ExpirationMinutes"] ?? "60");
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
+        SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
@@ -36,7 +31,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var token = new JwtSecurityToken(
+        JwtSecurityToken token = new(
             issuer: issuer,
             audience: audience,
             claims: claims,

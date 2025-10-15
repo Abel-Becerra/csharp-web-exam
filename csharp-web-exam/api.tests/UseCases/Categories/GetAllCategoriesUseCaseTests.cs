@@ -21,15 +21,15 @@ public class GetAllCategoriesUseCaseTests
     public async Task ExecuteAsync_ReturnsAllCategories()
     {
         // Arrange
-        var categories = new List<CategoryDto>
-        {
-            new CategoryDto { Id = 1, Name = "Electronics" },
-            new CategoryDto { Id = 2, Name = "Books" }
-        };
+        List<CategoryDto> categories =
+        [
+            new() { Id = 1, Name = "Electronics" },
+            new() { Id = 2, Name = "Books" }
+        ];
         _mockService.Setup(s => s.GetAllCategoriesAsync()).ReturnsAsync(categories);
 
         // Act
-        var result = await _useCase.ExecuteAsync();
+        IEnumerable<CategoryDto> result = await _useCase.ExecuteAsync();
 
         // Assert
         Assert.NotNull(result);
@@ -44,7 +44,7 @@ public class GetAllCategoriesUseCaseTests
         _mockService.Setup(s => s.GetAllCategoriesAsync()).ReturnsAsync(new List<CategoryDto>());
 
         // Act
-        var result = await _useCase.ExecuteAsync();
+        IEnumerable<CategoryDto> result = await _useCase.ExecuteAsync();
 
         // Assert
         Assert.NotNull(result);

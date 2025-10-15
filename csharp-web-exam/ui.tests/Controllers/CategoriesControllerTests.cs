@@ -1,11 +1,10 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using csharp_web_exam.Controllers;
+using csharp_web_exam.Models;
+using csharp_web_exam.Services;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using csharp_web_exam.Controllers;
-using csharp_web_exam.Models;
-using csharp_web_exam.Services;
 
 namespace ui.tests.Controllers
 {
@@ -28,22 +27,22 @@ namespace ui.tests.Controllers
         public async Task Index_ReturnsViewResult_WithCategoryList()
         {
             // Arrange
-            var categories = new List<CategoryViewModel>
-            {
-                new CategoryViewModel { Id = 1, Name = "Category 1" },
-                new CategoryViewModel { Id = 2, Name = "Category 2" }
-            };
+            List<CategoryViewModel> categories =
+            [
+                new() { Id = 1, Name = "Category 1" },
+                new() { Id = 2, Name = "Category 2" }
+            ];
 
             _mockApiClient.Setup(x => x.GetCategoriesAsync())
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.Index() as ViewResult;
+            ViewResult result = await _controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result.Model, typeof(List<CategoryViewModel>));
-            var model = result.Model as List<CategoryViewModel>;
+            List<CategoryViewModel> model = result.Model as List<CategoryViewModel>;
             Assert.AreEqual(2, model.Count);
         }
 
@@ -56,18 +55,18 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var category = new CategoryViewModel { Id = categoryId, Name = "Test Category" };
+            CategoryViewModel category = new() { Id = categoryId, Name = "Test Category" };
 
             _mockApiClient.Setup(x => x.GetCategoryByIdAsync(categoryId))
                 .ReturnsAsync(category);
 
             // Act
-            var result = await _controller.Details(categoryId) as ViewResult;
+            ViewResult result = await _controller.Details(categoryId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result.Model, typeof(CategoryViewModel));
-            var model = result.Model as CategoryViewModel;
+            CategoryViewModel model = result.Model as CategoryViewModel;
             Assert.AreEqual(categoryId, model.Id);
         }
 
@@ -80,7 +79,7 @@ namespace ui.tests.Controllers
                 .ThrowsAsync(new System.Exception("Category not found"));
 
             // Act
-            var result = await _controller.Details(invalidId) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Details(invalidId) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -95,7 +94,7 @@ namespace ui.tests.Controllers
         public void Create_GET_ReturnsViewResult()
         {
             // Act
-            var result = _controller.Create() as ViewResult;
+            ViewResult result = _controller.Create() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -105,12 +104,12 @@ namespace ui.tests.Controllers
         public async Task Create_POST_WithValidModel_RedirectsToIndex()
         {
             // Arrange
-            var category = new CategoryViewModel
+            CategoryViewModel category = new()
             {
                 Name = "New Category"
             };
 
-            var createdCategory = new CategoryViewModel
+            CategoryViewModel createdCategory = new()
             {
                 Id = 1,
                 Name = category.Name
@@ -120,7 +119,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(createdCategory);
 
             // Act
-            var result = await _controller.Create(category) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Create(category) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -132,11 +131,11 @@ namespace ui.tests.Controllers
         public async Task Create_POST_WithInvalidModel_ReturnsView()
         {
             // Arrange
-            var category = new CategoryViewModel();
+            CategoryViewModel category = new();
             _controller.ModelState.AddModelError("Name", "Name is required");
 
             // Act
-            var result = await _controller.Create(category) as ViewResult;
+            ViewResult result = await _controller.Create(category) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -148,11 +147,11 @@ namespace ui.tests.Controllers
         public async Task Create_POST_WithEmptyName_ReturnsViewWithError()
         {
             // Arrange
-            var category = new CategoryViewModel { Name = "" };
+            CategoryViewModel category = new() { Name = "" };
             _controller.ModelState.AddModelError("Name", "Name is required");
 
             // Act
-            var result = await _controller.Create(category) as ViewResult;
+            ViewResult result = await _controller.Create(category) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -168,13 +167,13 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var category = new CategoryViewModel { Id = categoryId, Name = "Test Category" };
+            CategoryViewModel category = new() { Id = categoryId, Name = "Test Category" };
 
             _mockApiClient.Setup(x => x.GetCategoryByIdAsync(categoryId))
                 .ReturnsAsync(category);
 
             // Act
-            var result = await _controller.Edit(categoryId) as ViewResult;
+            ViewResult result = await _controller.Edit(categoryId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -186,7 +185,7 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var category = new CategoryViewModel
+            CategoryViewModel category = new()
             {
                 Id = categoryId,
                 Name = "Updated Category"
@@ -196,7 +195,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(true);
 
             // Act
-            var result = await _controller.Edit(categoryId, category) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.Edit(categoryId, category) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -209,11 +208,11 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var category = new CategoryViewModel { Id = categoryId };
+            CategoryViewModel category = new() { Id = categoryId };
             _controller.ModelState.AddModelError("Name", "Name is required");
 
             // Act
-            var result = await _controller.Edit(categoryId, category) as ViewResult;
+            ViewResult result = await _controller.Edit(categoryId, category) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -229,13 +228,13 @@ namespace ui.tests.Controllers
         {
             // Arrange
             int categoryId = 1;
-            var category = new CategoryViewModel { Id = categoryId, Name = "Test Category" };
+            CategoryViewModel category = new() { Id = categoryId, Name = "Test Category" };
 
             _mockApiClient.Setup(x => x.GetCategoryByIdAsync(categoryId))
                 .ReturnsAsync(category);
 
             // Act
-            var result = await _controller.Delete(categoryId) as ViewResult;
+            ViewResult result = await _controller.Delete(categoryId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -252,7 +251,7 @@ namespace ui.tests.Controllers
                 .ReturnsAsync(true);
 
             // Act
-            var result = await _controller.DeleteConfirmed(categoryId) as RedirectToRouteResult;
+            RedirectToRouteResult result = await _controller.DeleteConfirmed(categoryId) as RedirectToRouteResult;
 
             // Assert
             Assert.IsNotNull(result);

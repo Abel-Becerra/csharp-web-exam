@@ -3,19 +3,14 @@ using api.Domain.Entities;
 using api.Infrastructure.Data;
 using Dapper;
 using log4net;
-using System.Text;
+using System.Data;
 
 namespace api.Infrastructure.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository(IDbConnectionFactory connectionFactory) : IProductRepository
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(ProductRepository));
-    private readonly IDbConnectionFactory _connectionFactory;
-
-    public ProductRepository(IDbConnectionFactory connectionFactory)
-    {
-        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-    }
+    private readonly IDbConnectionFactory _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 
     public async Task<(IEnumerable<Product> Items, int TotalCount)> GetPagedAsync(
         int page, 
@@ -25,8 +20,8 @@ public class ProductRepository : IProductRepository
         string? sortBy = null,
         bool sortDescending = false)
     {
-        var whereConditions = new List<string>();
-        var parameters = new DynamicParameters();
+        List<string> whereConditions = [];
+        DynamicParameters parameters = new();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -40,12 +35,12 @@ public class ProductRepository : IProductRepository
             parameters.Add("CategoryId", categoryId.Value);
         }
 
-        var whereClause = whereConditions.Any() 
-            ? "WHERE " + string.Join(" AND ", whereConditions) 
+        string whereClause = whereConditions.Any()
+            ? "WHERE " + string.Join(" AND ", whereConditions)
             : string.Empty;
 
         // Determine sort column
-        var sortColumn = sortBy?.ToLower() switch
+        string sortColumn = sortBy?.ToLower() switch
         {
             "name" => "p.Name",
             "price" => "p.Price",
@@ -54,20 +49,20 @@ public class ProductRepository : IProductRepository
             _ => "p.Id"
         };
 
-        var sortDirection = sortDescending ? "DESC" : "ASC";
+        string sortDirection = sortDescending ? "DESC" : "ASC";
 
         // Count query
-        var countSql = $@"
+        string countSql = $@"
             SELECT COUNT(1) 
             FROM Products p 
             {whereClause}";
 
         // Data query with pagination
-        var offset = (page - 1) * pageSize;
+        int offset = (page - 1) * pageSize;
         parameters.Add("Offset", offset);
         parameters.Add("PageSize", pageSize);
 
-        var dataSql = $@"
+        string dataSql = $@"
             SELECT p.Id, p.Name, p.Price, p.CategoryId, p.CreatedAt, p.UpdatedAt,
                    c.Id, c.Name, c.CreatedAt, c.UpdatedAt
             FROM Products p
@@ -78,11 +73,11 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
+            using IDbConnection connection = _connectionFactory.CreateConnection();
             
-            var totalCount = await connection.ExecuteScalarAsync<int>(countSql, parameters);
-            
-            var products = await connection.QueryAsync<Product, Category, Product>(
+            int totalCount = await connection.ExecuteScalarAsync<int>(countSql, parameters);
+
+            IEnumerable<Product> products = await connection.QueryAsync<Product, Category, Product>(
                 dataSql,
                 (product, category) =>
                 {
@@ -114,9 +109,9 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            
-            var products = await connection.QueryAsync<Product, Category, Product>(
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+
+            IEnumerable<Product> products = await connection.QueryAsync<Product, Category, Product>(
                 sql,
                 (product, category) =>
                 {
@@ -126,7 +121,7 @@ public class ProductRepository : IProductRepository
                 new { Id = id },
                 splitOn: "Id");
 
-            var product = products.FirstOrDefault();
+            Product? product = products.FirstOrDefault();
             _log.Debug($"Retrieved product with ID {id}: {(product != null ? "Found" : "Not Found")}");
             return product;
         }
@@ -146,8 +141,8 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var id = await connection.ExecuteScalarAsync<int>(sql, product);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int id = await connection.ExecuteScalarAsync<int>(sql, product);
             _log.Debug($"Created product with ID {id}");
             return id;
         }
@@ -167,8 +162,8 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, product);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int rowsAffected = await connection.ExecuteAsync(sql, product);
             _log.Debug($"Updated product with ID {product.Id}: {rowsAffected} rows affected");
             return rowsAffected > 0;
         }
@@ -185,8 +180,8 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
             _log.Debug($"Deleted product with ID {id}: {rowsAffected} rows affected");
             return rowsAffected > 0;
         }
@@ -203,8 +198,8 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var count = await connection.ExecuteScalarAsync<int>(sql, new { Id = id });
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            int count = await connection.ExecuteScalarAsync<int>(sql, new { Id = id });
             return count > 0;
         }
         catch (Exception ex)
@@ -232,8 +227,8 @@ public class ProductRepository : IProductRepository
 
         try
         {
-            using var connection = _connectionFactory.CreateConnection();
-            var results = await connection.QueryAsync<(int, string, int, decimal, decimal, decimal, decimal)>(sql);
+            using IDbConnection connection = _connectionFactory.CreateConnection();
+            IEnumerable<(int, string, int, decimal, decimal, decimal, decimal)> results = await connection.QueryAsync<(int, string, int, decimal, decimal, decimal, decimal)>(sql);
             _log.Debug($"Retrieved {results.Count()} category groups");
             return results;
         }

@@ -23,7 +23,7 @@ public static class AuthEndpoints
 
             try
             {
-                var response = await authService.RegisterAsync(request);
+                LoginResponse response = await authService.RegisterAsync(request);
                 _log.Info($"User registered successfully: {request.Username}");
                 return Results.Ok(response);
             }
@@ -52,7 +52,7 @@ public static class AuthEndpoints
 
             try
             {
-                var response = await authService.LoginAsync(request);
+                LoginResponse? response = await authService.LoginAsync(request);
 
                 if (response == null)
                 {

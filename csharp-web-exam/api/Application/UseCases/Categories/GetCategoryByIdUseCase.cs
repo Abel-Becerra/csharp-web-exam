@@ -4,15 +4,10 @@ using log4net;
 
 namespace api.Application.UseCases.Categories;
 
-public class GetCategoryByIdUseCase
+public class GetCategoryByIdUseCase(ICategoryService categoryService)
 {
     private static readonly ILog _log = LogManager.GetLogger(typeof(GetCategoryByIdUseCase));
-    private readonly ICategoryService _categoryService;
-
-    public GetCategoryByIdUseCase(ICategoryService categoryService)
-    {
-        _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
-    }
+    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
 
     public async Task<CategoryDto?> ExecuteAsync(int id)
     {
@@ -20,7 +15,7 @@ public class GetCategoryByIdUseCase
         
         try
         {
-            var category = await _categoryService.GetCategoryByIdAsync(id);
+            CategoryDto? category = await _categoryService.GetCategoryByIdAsync(id);
             
             if (category == null)
             {
